@@ -1,6 +1,12 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOnly, adminOrGuildMember, adminOrOwnGuild, adminOrOwnGuildDraft, publishedOrOwnGuild } from '@/access'
+import {
+  adminOrGuildMember,
+  adminOrOwnGuild,
+  adminOrOwnGuildDraft,
+  adminOrOwnGuildUnpublished,
+  publishedOrOwnGuild,
+} from '@/access'
 import { publicationFields } from '@/fields/publication'
 import { simpleRichTextEditor } from '@/fields/richText'
 import { slugField } from '@/fields/slug'
@@ -27,7 +33,7 @@ export const Games: CollectionConfig = {
     readVersions: adminOrOwnGuild('version.guild'),
     create: adminOrGuildMember,
     update: adminOrOwnGuildDraft('guild'),
-    delete: adminOnly,
+    delete: adminOrOwnGuildUnpublished('guild'),
   },
   versions: draftVersions,
   hooks: {

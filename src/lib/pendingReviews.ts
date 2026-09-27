@@ -9,6 +9,9 @@ export type PendingReview = {
 
 const latestVersionIsDraft: Where = { _status: { equals: 'draft' } }
 
+// Opening "Criar novo" autosaves an empty draft; one without a name was never sent for review.
+const hasTitle = (title?: string | null): title is string => Boolean(title?.trim())
+
 export const listPendingReviews = async (payload: Payload): Promise<PendingReview[]> => {
   const query = { draft: true, where: latestVersionIsDraft, depth: 0, pagination: false, overrideAccess: true } as const
   const [guilds, games] = await Promise.all([
@@ -17,13 +20,13 @@ export const listPendingReviews = async (payload: Payload): Promise<PendingRevie
   ])
 
   return [
-    ...guilds.docs.map((doc) => ({
+    ...guilds.docs.filter((doc) => hasTitle(doc.name)).map((doc) => ({
       collection: 'guilds' as const,
       id: doc.id,
       title: doc.name,
       updatedAt: doc.updatedAt,
     })),
-    ...games.docs.map((doc) => ({
+    ...games.docs.filter((doc) => hasTitle(doc.title)).map((doc) => ({
       collection: 'games' as const,
       id: doc.id,
       title: doc.title,

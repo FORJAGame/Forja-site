@@ -160,7 +160,11 @@ export interface Guild {
   id: number;
   name: string;
   /**
-   * Gerado automaticamente a partir do nome. Aparece na URL.
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  /**
+   * Segue o nome até a primeira publicação. Depois fica fixo, porque aparece na URL.
    */
   slug: string;
   /**
@@ -231,7 +235,11 @@ export interface Game {
   id: number;
   title: string;
   /**
-   * Gerado automaticamente a partir do nome. Aparece na URL.
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  /**
+   * Segue o nome até a primeira publicação. Depois fica fixo, porque aparece na URL.
    */
   slug: string;
   /**
@@ -421,6 +429,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface GuildsSelect<T extends boolean = true> {
   name?: T;
+  generateSlug?: T;
   slug?: T;
   shortDescription?: T;
   description?: T;
@@ -446,6 +455,7 @@ export interface GuildsSelect<T extends boolean = true> {
  */
 export interface GamesSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
   slug?: T;
   guild?: T;
   developmentStatus?: T;

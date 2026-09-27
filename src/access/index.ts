@@ -62,3 +62,14 @@ export const adminOrOwnGuildDraft =
     if (!isAdmin(args.req.user) && args.data?._status === 'published') return false
     return adminOrOwnGuild(guildField)(args)
   }
+
+// Autosave creates a draft as soon as "Criar novo" opens, so editors must be able to clean up
+// what they abandoned. Anything that was ever published stays for the admins to decide.
+export const adminOrOwnGuildUnpublished =
+  (guildField: string): Access =>
+  ({ req }) => {
+    if (isAdmin(req.user)) return true
+    const guildId = getUserGuildId(req.user)
+    if (guildId === null) return false
+    return { and: [{ [guildField]: { equals: guildId } }, { publishedAt: { exists: false } }] }
+  }

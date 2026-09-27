@@ -1,27 +1,19 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-// The site is small and a single change (a guild name) shows up on many pages, so publish refreshes them all.
-export const PUBLIC_ROUTES: Array<[path: string, type?: 'page']> = [
-  ['/'],
-  ['/guildas'],
-  ['/guildas/[slug]', 'page'],
-  ['/jogos'],
-  ['/jogos/[slug]', 'page'],
-  ['/artigos'],
-]
-
+// A single change (a guild name) shows up on many pages, so publishing refreshes the whole site.
+// Every page carries the root layout tag; '/guildas/[slug]' would not match, because route groups
+// such as (frontend) are part of a page's cache tag.
 export const revalidatePublicSite = (): void => {
-  for (const [path, type] of PUBLIC_ROUTES) {
-    if (type) revalidatePath(path, type)
-    else revalidatePath(path)
-  }
+  revalidatePath('/', 'layout')
 }
 
-const isPublic = (doc: { _status?: unknown }) => doc._status === undefined || doc._status === 'published'
+const isPublic = (doc?: { _status?: unknown } | null) =>
+  Boolean(doc) && (doc?._status === undefined || doc?._status === 'published')
 
-export const revalidateOnPublish: CollectionAfterChangeHook = ({ doc, context }) => {
-  if (!context.disableRevalidate && isPublic(doc)) revalidatePublicSite()
+export const revalidateOnPublish: CollectionAfterChangeHook = ({ doc, previousDoc, context }) => {
+  const changesPublicContent = isPublic(doc) || previousDoc?._status === 'published'
+  if (!context.disableRevalidate && changesPublicContent) revalidatePublicSite()
   return doc
 }
 

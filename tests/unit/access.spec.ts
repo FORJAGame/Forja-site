@@ -6,6 +6,7 @@ import {
   adminOrGuildMember,
   adminOrOwnGuild,
   adminOrOwnGuildDraft,
+  adminOrOwnGuildUnpublished,
   adminOrSelf,
   getUserGuildId,
   isAdmin,
@@ -119,6 +120,25 @@ describe('adminOrOwnGuildDraft', () => {
   it('scopes draft saves to the editor guild', () => {
     expect(access(withData(editor, { _status: 'draft' }))).toEqual({ guild: { equals: 7 } })
     expect(access(argsFor(editor))).toEqual({ guild: { equals: 7 } })
+    expect(access(argsFor(null))).toBe(false)
+  })
+})
+
+describe('adminOrOwnGuildUnpublished', () => {
+  const access = adminOrOwnGuildUnpublished('guild')
+
+  it('lets admins delete anything', () => {
+    expect(access(argsFor(admin))).toBe(true)
+  })
+
+  it('lets editors delete only documents of their guild that were never published', () => {
+    expect(access(argsFor(editor))).toEqual({
+      and: [{ guild: { equals: 7 } }, { publishedAt: { exists: false } }],
+    })
+  })
+
+  it('denies users without a guild and anonymous visitors', () => {
+    expect(access(argsFor(editorWithoutGuild))).toBe(false)
     expect(access(argsFor(null))).toBe(false)
   })
 })

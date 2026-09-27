@@ -89,9 +89,38 @@ describe('games', () => {
     expect(live.title).toBe('Ecos de Ferro')
   })
 
-  it('forbids editors from deleting games', async () => {
+  it('forbids editors from deleting published games', async () => {
     const { editorA, guildA } = await createBaseFixture(payload)
     const game = await createGame(payload, guildA.id)
+
+    await expect(
+      payload.delete({ collection: 'games', id: game.id, user: editorA, overrideAccess: false }),
+    ).rejects.toThrow()
+  })
+
+  it('lets editors delete never-published drafts of their own guild only', async () => {
+    const { editorA, editorB, guildA } = await createBaseFixture(payload)
+    const draft = await payload.create({
+      collection: 'games',
+      data: { guild: guildA.id } as never,
+      draft: true,
+      user: editorA,
+      overrideAccess: false,
+    })
+
+    await expect(
+      payload.delete({ collection: 'games', id: draft.id, user: editorB, overrideAccess: false }),
+    ).rejects.toThrow()
+    await payload.delete({ collection: 'games', id: draft.id, user: editorA, overrideAccess: false })
+
+    const remaining = await payload.find({ collection: 'games', where: { id: { equals: draft.id } }, draft: true })
+    expect(remaining.docs).toHaveLength(0)
+  })
+
+  it('forbids editors from deleting a game that was published and later unpublished', async () => {
+    const { admin, editorA, guildA } = await createBaseFixture(payload)
+    const game = await createGame(payload, guildA.id)
+    await payload.update({ collection: 'games', id: game.id, data: { _status: 'draft' }, user: admin, overrideAccess: false })
 
     await expect(
       payload.delete({ collection: 'games', id: game.id, user: editorA, overrideAccess: false }),

@@ -67,6 +67,20 @@ describe('listPendingReviews', () => {
     expect(reviews.map((review) => review.title)).toEqual(['Circuito 404'])
   })
 
+  // With autosave, just opening "Criar novo" creates an empty draft; nobody sent it for review.
+  it('ignores untitled drafts left behind by an abandoned form', async () => {
+    const { editorA, guildA } = await createBaseFixture(payload)
+    await payload.create({
+      collection: 'games',
+      data: { guild: guildA.id } as never,
+      draft: true,
+      user: editorA,
+      overrideAccess: false,
+    })
+
+    expect(await listPendingReviews(payload)).toEqual([])
+  })
+
   it('drops an item once an admin publishes it', async () => {
     const { admin, editorA, guildA } = await createBaseFixture(payload)
     const game = await createGame(payload, guildA.id)
