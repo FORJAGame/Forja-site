@@ -15,7 +15,7 @@
     "test": "cross-env NODE_OPTIONS=--no-deprecation vitest run",
     "test:watch": "cross-env NODE_OPTIONS=--no-deprecation vitest",
     "typecheck": "tsc --noEmit",
-    "db:up": "docker compose up -d --wait",
+    "db:up": "docker compose up -d --wait postgres storage && docker compose run --rm storage-buckets",
     "db:down": "docker compose down",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
     "tokens": "tsx scripts/generate-tokens.ts"
