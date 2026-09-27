@@ -18,6 +18,9 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
+    components: {
+      beforeDashboard: ['@/components/admin/PendingReviews#PendingReviews'],
+    },
   },
   collections: [Users, Guilds, Games, Articles, Media],
   db: postgresAdapter({
