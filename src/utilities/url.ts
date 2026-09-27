@@ -29,3 +29,5 @@ export const getYouTubeVideoId = (value: string): string | null => {
 
   return id && YOUTUBE_VIDEO_ID.test(id) ? id : null
 }
+
+export const isExternalHref = (href: string): boolean => /^(https?:|mailto:|tel:)/.test(href)
