@@ -18,13 +18,37 @@ Estado atual: **fase de design, ainda sem código.** Status geral: em avaliaçã
 - Nada vai ao ar sem aprovação de um admin, **inclusive edições de páginas já publicadas**.
 - Custo idealmente zero (Vercel + Neon/Supabase, ou infraestrutura da faculdade).
 
+## Stack
+
+Um único app Next.js, com um único deploy:
+
+| Camada | Escolha |
+|---|---|
+| Front e back | **Next.js** (App Router). As páginas públicas são Server Components. |
+| CMS e painel admin | **Payload 3** (TypeScript, roda dentro do Next.js) |
+| Banco | **Postgres**: Neon em produção, Docker Compose no ambiente local |
+| Acesso a dados | **Adaptador Postgres do Payload** (`@payloadcms/db-postgres`) e **Local API** (`payload.find()`, etc.) |
+| Mídia | `@payloadcms/storage-vercel-blob` (ou `storage-s3` apontando para o Cloudflare R2). Vídeo só por embed do YouTube. |
+| Estilo | **Tailwind v4**, com os tokens do `DESIGN.md` no `@theme` |
+| Fontes | `next/font` (Saira Condensed, Inter) e o pacote `geist` (Geist Mono) |
+| Animação | **Motion** (`motion/react`), seguindo a seção `## Motion` do `DESIGN.md` |
+| Rich text | Lexical (padrão do Payload), limitado a poucos blocos para manter o template fixo |
+| Testes | **Vitest**, com foco nas regras de acesso |
+| Pacotes | pnpm |
+
+**Decisões que não devem ser revertidas:**
+- **Sem Prisma.** O Payload já gera o schema e as migrações a partir das coleções. Um segundo ORM duplicaria o schema e, pior, as leituras feitas por ele pulariam as regras de acesso. Leia e grave dados sempre pela Local API.
+- **Sem Resend, Inngest ou cron.** Para refletir uma publicação no site, use o hook `afterChange` do Payload chamando `revalidatePath`. Quando o e-mail entrar (ver "Admins" abaixo), use `@payloadcms/email-nodemailer` com SMTP.
+- **Neon, não Supabase.** O free do Neon escala a zero e volta sozinho. O free do Supabase **pausa o projeto após ~7 dias sem atividade**, e um site de pouco tráfego com páginas cacheadas pode cair nisso.
+
+As versões exatas vêm do template oficial do Payload, na hora de criar o projeto.
+
 ## Arquitetura
 
-O CMS é o **Payload** (headless, em TypeScript, roda dentro do Next.js), em vez de construir um painel admin na mão. O Payload já entrega autenticação, papéis, upload, editor de rich text, versionamento e painel admin. Sobram para implementar o modelo de conteúdo, as regras de acesso e o front.
+O Payload substitui o painel admin feito na mão: ele já entrega autenticação, papéis, upload, editor de rich text, versionamento e o painel. Sobram para implementar o modelo de conteúdo, as regras de acesso e o front.
 
 - **Coleções:** `guilds`, `games`, `articles`, `users`, `media`.
-- **Deploy:** Vercel, com Postgres no **Neon**. O free do Neon escala a zero e volta sozinho (com cold start). Evite o Supabase free, que **pausa o projeto após ~7 dias sem atividade**, e um site de pouco tráfego com páginas cacheadas pode cair nisso.
-- **Mídia:** imagens em object storage (R2 ou Supabase Storage). Vídeo só por embed do YouTube.
+- **Deploy:** Vercel, com Postgres no Neon.
 
 ### Regras de acesso (núcleo do sistema)
 
@@ -34,7 +58,7 @@ O CMS é o **Payload** (headless, em TypeScript, roda dentro do Next.js), em vez
 - **Admins (plural):** professores responsáveis e alunos veteranos de confiança. Eles aprovam o conteúdo das guildas e **cadastram os artigos**.
   - Manter sempre pelo menos 1 professor como admin, para garantir continuidade entre períodos.
   - Offboarding: revisar a lista de admins no início de cada período e rebaixar quem saiu.
-  - Para evitar a responsabilidade difusa ("alguém aprova"), notificar os admins por e-mail quando um rascunho for enviado para revisão.
+  - Para evitar a responsabilidade difusa ("alguém aprova"), os admins precisam saber quando um rascunho entra na fila. **MVP:** uma visão "aguardando aprovação" no painel admin. **Logo depois do MVP:** e-mail aos admins quando um rascunho for enviado para revisão, via adaptador SMTP do Payload.
   - Autoaprovação: um admin que também é membro de guilda pode publicar o próprio conteúdo. Aceito por ora (o grupo é pequeno e baseado em confiança), mas **registre quem publicou via hook**, para deixar rastro.
 
 ### Artigos
@@ -80,12 +104,28 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
 5. Protótipo no Payload: coleções, regra de acesso por guilda e fluxo draft/publish.
 6. Documentar a entrega: README, runbook de deploy e backup, guia de 1 página para editores.
 
+## Convenções de código
+
+- **Código em inglês:** nomes de variáveis, funções, componentes, arquivos e comentários. O texto que aparece para o usuário do site continua em português.
+- **Código que se explica sozinho.** Nomes claros e funções pequenas, em vez de comentários. Comente só o *porquê* que não está visível no código (uma regra de negócio, um contorno de bug). Não comente o *o quê*.
+- **Componentes reutilizáveis são prioridade**, porque quem herdar o projeto vai mexer principalmente neles:
+  - Um componente por responsabilidade. Os componentes de UI (botão, card, badge, cabeçalho de seção…) ficam separados das seções da página e não sabem nada do Payload: recebem props simples e tipadas.
+  - As seções e as páginas buscam os dados e montam a tela a partir desses componentes.
+  - As variações (ex.: botão `primary`/`secondary`/`onPrimary`, status do jogo) são uma prop do mesmo componente, não componentes duplicados.
+  - Estilos só com tokens do `DESIGN.md`, sem cores ou tamanhos soltos.
+  - Antes de criar um componente, procure um existente que resolva com uma nova variação.
+- **Animações** também usam componentes reutilizáveis (ex.: um wrapper de "reveal"). Não espalhe configurações de Motion pelas seções.
+
+## Ambiente local
+
+O Postgres local sobe via **Docker Compose** (`docker compose up -d`). Os comandos de dev, build, teste e migração serão documentados aqui assim que o projeto for criado.
+
 ## Design: `DESIGN.md` é obrigatório
 
 **Toda decisão visual precisa estar em conformidade com `DESIGN.md`.** Ele segue o formato DESIGN.md do Google Stitch: tokens em YAML no frontmatter e as regras em prosa. Vale para cores, tipografia, espaçamento, cantos, componentes e layout de qualquer página, incluindo guilda, jogo e `/artigos`, não só a landing.
 
 - Use os tokens do `DESIGN.md` (ex.: `primary`, `headline-lg`, `spacing.section`). Não use valores soltos no código.
-- Antes de criar um componente novo, veja se ele já está descrito em `## Components` ou em `## Page Patterns`.
+- Antes de criar um componente novo, veja se ele já está descrito em `## Components` ou em `## Page Patterns`. Para animações, siga `## Motion`.
 - Se uma decisão exigir algo que o `DESIGN.md` não cobre ou que o contradiz, **atualize o `DESIGN.md` primeiro** (com o motivo) e só depois implemente. Nunca diverja em silêncio.
 - Depois de editar o arquivo, valide com o linter oficial. Os avisos de `borderColor` são intencionais.
   ```

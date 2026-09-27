@@ -304,6 +304,31 @@ A forma é **reta e angular**, como os cortes da logo.
 - **Não faça:** usar Saira Condensed em parágrafos, nem Inter em caixa-alta.
 - **Não faça:** repetir a logo inteira como decoração. O que se repete são as fagulhas, não o letreiro.
 
+## Motion
+
+A animação reforça a ideia de **"forja"**: coisas que cortam, faíscam e se encaixam. É rápida, direta e sempre com propósito. Nada flutua nem quica. Implementação com **Motion** (`motion/react`) em componentes reutilizáveis.
+
+**Curvas e durações**
+- Easing padrão: `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out forte), com ataque rápido e pouso suave.
+- Micro-interações (hover, foco, press): 150–200ms.
+- Entradas de elementos: 400–600ms.
+- Momento do hero: até ~1,2s no total, só no primeiro carregamento.
+- Stagger entre itens de uma lista ou grade: 60–80ms.
+
+**Momentos**
+- **Hero ("golpe"):** as fagulhas entram em diagonal (~28°), vindo de fora para a posição final, com leve sobre-escala que se assenta. As faixas diagonais deslizam logo em seguida. As linhas do título sobem uma a uma, revelando o texto por uma máscara. "FORJADOS." acende por último em vermelho. Depois vêm o subtítulo e os botões.
+- **Entradas por scroll:** cabeçalhos de seção, cards e linhas de artigo aparecem com fade e um deslocamento de 16–24px para cima, uma única vez, quando entram na tela. Os grids usam stagger.
+- **Números grandes (stat):** contam de 0 até o valor quando entram na tela.
+- **Hover em card:** a barra de acento cresce de 56px até a largura total, a borda passa para `primary` e a capa ganha um leve zoom (1.03).
+- **Hover em botão:** o primário vai para `primary-hover`. Os links com "→" deslocam a seta 4px.
+- **Fagulhas no hero:** um parallax sutil com o scroll (no máximo ~40px). Nada além disso.
+
+**Regras**
+- Respeite `prefers-reduced-motion`: sem deslocamentos, parallax nem contagem. O conteúdo aparece direto, com no máximo um fade curto.
+- Anime só `transform` e `opacity` (performance). Nunca anime layout.
+- Nada de scroll-jacking, loops infinitos chamando atenção, animação atrasando conteúdo ou entrada que se repete toda vez que o elemento reaparece.
+- O conteúdo precisa estar legível e clicável mesmo antes de qualquer animação terminar.
+
 ## Page Patterns
 
 Estrutura da landing (`/`):
