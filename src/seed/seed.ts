@@ -6,6 +6,9 @@ import { articles, games, guilds } from './data'
 
 export const SEED_ADMIN = { name: 'Admin Forja', email: 'admin@forja.local', password: 'forja-dev' }
 
+// The seed runs outside Next.js, where revalidatePath would throw.
+const trustedScript = { overrideAccess: true, context: { disableRevalidate: true } } as const
+
 const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds'] as const
 
 export const seed = async (payload: Payload): Promise<void> => {
@@ -14,17 +17,17 @@ export const seed = async (payload: Payload): Promise<void> => {
   }
 
   for (const collection of COLLECTIONS_IN_DELETE_ORDER) {
-    await payload.delete({ collection, where: { id: { exists: true } }, overrideAccess: true })
+    await payload.delete({ collection, where: { id: { exists: true } }, ...trustedScript })
   }
 
-  await payload.create({ collection: 'users', data: { ...SEED_ADMIN, role: 'admin' }, overrideAccess: true })
+  await payload.create({ collection: 'users', data: { ...SEED_ADMIN, role: 'admin' }, ...trustedScript })
 
   const guildIdByName = new Map<string, number>()
   for (const guild of guilds) {
     const created = await payload.create({
       collection: 'guilds',
       data: { ...guild, slug: slugify(guild.name), _status: 'published' },
-      overrideAccess: true,
+      ...trustedScript,
     })
     guildIdByName.set(guild.name, created.id)
   }
@@ -39,7 +42,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     await payload.create({
       collection: 'games',
       data: { ...game, slug: slugify(game.title), guild: guildId(guildName), _status: 'published' },
-      overrideAccess: true,
+      ...trustedScript,
     })
   }
 
@@ -47,7 +50,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     await payload.create({
       collection: 'articles',
       data: { ...article, guild: guildName ? guildId(guildName) : null },
-      overrideAccess: true,
+      ...trustedScript,
     })
   }
 }

@@ -2,12 +2,14 @@ import type { CollectionConfig } from 'payload'
 
 import { adminOnly, anyone } from '@/access'
 import { validateRequiredHttpUrl } from '@/fields/validators'
+import { revalidateAfterDelete, revalidateOnPublish } from '@/hooks/revalidation'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
   labels: { singular: 'Artigo', plural: 'Artigos' },
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'venue', 'date'] },
   defaultSort: '-date',
+  hooks: { afterChange: [revalidateOnPublish], afterDelete: [revalidateAfterDelete] },
   access: {
     read: anyone,
     create: adminOnly,

@@ -12,6 +12,7 @@ import {
   requireDraftForNonAdmins,
   requireDraftModeForNonAdmins,
 } from '@/hooks/publication'
+import { revalidateAfterDelete, revalidateOnPublish } from '@/hooks/revalidation'
 
 export const Guilds: CollectionConfig = {
   slug: 'guilds',
@@ -29,6 +30,8 @@ export const Guilds: CollectionConfig = {
     beforeOperation: [requireDraftModeForNonAdmins],
     beforeChange: [requireDraftForNonAdmins, recordPublisher],
     beforeDelete: [preventDeletingGuildInUse],
+    afterChange: [revalidateOnPublish],
+    afterDelete: [revalidateAfterDelete],
   },
   fields: [
     { name: 'name', label: 'Nome', type: 'text', required: true },

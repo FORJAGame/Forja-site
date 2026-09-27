@@ -12,6 +12,7 @@ import {
   requireDraftForNonAdmins,
   requireDraftModeForNonAdmins,
 } from '@/hooks/publication'
+import { revalidateAfterDelete, revalidateOnPublish } from '@/hooks/revalidation'
 
 export const Games: CollectionConfig = {
   slug: 'games',
@@ -28,6 +29,8 @@ export const Games: CollectionConfig = {
   hooks: {
     beforeOperation: [requireDraftModeForNonAdmins],
     beforeChange: [assignOwnGuild, requireDraftForNonAdmins, recordPublisher],
+    afterChange: [revalidateOnPublish],
+    afterDelete: [revalidateAfterDelete],
   },
   fields: [
     { name: 'title', label: 'Título', type: 'text', required: true },
