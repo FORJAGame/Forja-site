@@ -116,9 +116,21 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
   - Antes de criar um componente, procure um existente que resolva com uma nova variação.
 - **Animações** também usam componentes reutilizáveis (ex.: um wrapper de "reveal"). Não espalhe configurações de Motion pelas seções.
 
-## Ambiente local
+## Comandos
 
-O Postgres local sobe via **Docker Compose** (`docker compose up -d`). Os comandos de dev, build, teste e migração serão documentados aqui assim que o projeto for criado.
+```bash
+pnpm db:up                  # Postgres local (Docker). Cria os bancos forja e forja_test
+pnpm dev                    # site em http://localhost:3000, painel em /admin
+pnpm test                   # Vitest (usa o banco forja_test; precisa do db:up)
+pnpm test tests/int/games.spec.ts -t "nome do teste"   # um arquivo ou um teste
+pnpm typecheck && pnpm lint
+pnpm build
+pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
+pnpm generate:importmap     # depois de registrar componente customizado no admin
+pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
+```
+
+Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand -hex 32`). O pnpm 12 lê a liberação de build scripts do `pnpm-workspace.yaml` (`allowBuilds`), não do `package.json`.
 
 ## Design: `DESIGN.md` é obrigatório
 
@@ -133,7 +145,6 @@ O Postgres local sobe via **Docker Compose** (`docker compose up -d`). Os comand
   ```
 - Protótipo de referência no Figma: https://www.figma.com/design/qLr3pgjNo0az2ZJVdMaBaQ/Forja (página `02 · Landing`, desktop e mobile). Onde o Figma e o `DESIGN.md` divergirem, vale o `DESIGN.md`.
 
-`raycast-design.md` é só a referência de inspiração que originou o sistema. Não é norma.
 
 ## Arquivos
 
