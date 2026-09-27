@@ -1,5 +1,7 @@
 import type { Article, Game, Guild, Media } from '@/payload-types'
+import { formatMonthYear } from '@/utilities/date'
 import { pluralize } from '@/utilities/pluralize'
+import { getYouTubeVideoId } from '@/utilities/url'
 
 import type { DevelopmentStatus, ExternalLinkView, MediaView, RichTextData } from './views'
 
@@ -130,3 +132,26 @@ export const toGuildPage = (guild: Guild, games: GameCardView[]): GuildPageView 
     games,
   }
 }
+
+export type GamePageView = GameCardView & {
+  slug: string
+  guild: { name: string; href: string } | null
+  trailerVideoId: string | null
+  description: RichTextData | null
+  gallery: MediaView[]
+  playUrl: string | null
+  credits: string | null
+  releaseDate: string | null
+}
+
+export const toGamePage = (game: Game): GamePageView => ({
+  ...toGameCard(game),
+  slug: game.slug,
+  guild: typeof game.guild === 'object' ? { name: game.guild.name, href: `/guildas/${game.guild.slug}` } : null,
+  trailerVideoId: game.trailerUrl ? getYouTubeVideoId(game.trailerUrl) : null,
+  description: toRichText(game.description),
+  gallery: (game.gallery ?? []).map(toMediaView).filter((image): image is MediaView => image !== null),
+  playUrl: game.playUrl || null,
+  credits: game.credits?.trim() || null,
+  releaseDate: game.releaseDate ? formatMonthYear(game.releaseDate) : null,
+})
