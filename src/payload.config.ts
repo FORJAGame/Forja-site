@@ -6,6 +6,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { Articles } from './collections/Articles'
 import { Games } from './collections/Games'
 import { Guilds } from './collections/Guilds'
 import { Media } from './collections/Media'
@@ -18,7 +19,7 @@ export default buildConfig({
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
   },
-  collections: [Users, Guilds, Games, Media],
+  collections: [Users, Guilds, Games, Articles, Media],
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URL || '' },
   }),

@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     guilds: Guild;
     games: Game;
+    articles: Article;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -81,6 +82,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     guilds: GuildsSelect<false> | GuildsSelect<true>;
     games: GamesSelect<false> | GamesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -205,6 +207,9 @@ export interface Guild {
  */
 export interface Media {
   id: number;
+  /**
+   * Descreva a imagem para quem usa leitor de tela.
+   */
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -271,6 +276,35 @@ export interface Game {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  title: string;
+  description: string;
+  authors: {
+    name: string;
+    id?: string | null;
+  }[];
+  date: string;
+  /**
+   * Revista ou evento. Ex.: SBGames 2026.
+   */
+  venue: string;
+  /**
+   * Se houver DOI, prefira o link https://doi.org/..., que não quebra.
+   */
+  url?: string | null;
+  /**
+   * Opcional. Usado só para filtrar.
+   */
+  guild?: (number | null) | Guild;
+  tags?: string[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -304,6 +338,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'games';
         value: number | Game;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
       } | null)
     | ({
         relationTo: 'media';
@@ -425,6 +463,27 @@ export interface GamesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  authors?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  date?: T;
+  venue?: T;
+  url?: T;
+  guild?: T;
+  tags?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
