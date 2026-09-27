@@ -206,6 +206,8 @@ export interface Guild {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Imagens de até 4 MB. Comprima fotos e prints grandes antes de enviar.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -215,6 +217,8 @@ export interface Media {
    * Descreva a imagem para quem usa leitor de tela.
    */
   alt: string;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -501,6 +505,8 @@ export interface ArticlesSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

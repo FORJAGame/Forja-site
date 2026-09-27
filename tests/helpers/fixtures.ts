@@ -17,7 +17,7 @@ export const expectFieldError = async (operation: Promise<unknown>, path: string
   })
 }
 
-const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds'] as const
+const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds', 'media'] as const
 
 export const getTestPayload = (): Promise<Payload> => getPayload({ config })
 

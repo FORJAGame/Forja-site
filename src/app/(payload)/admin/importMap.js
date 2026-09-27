@@ -14,6 +14,7 @@ import { AdminIcon as AdminIcon_cf05759dc79b7737cf5272e2ef70392b } from '@/compo
 import { AdminLogo as AdminLogo_cf05759dc79b7737cf5272e2ef70392b } from '@/components/admin/AdminGraphics'
 import { PendingReviews as PendingReviews_8c192d28e91779cb521705998bc5b833 } from '@/components/admin/PendingReviews'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
@@ -32,5 +33,6 @@ export const importMap = {
   "@/components/admin/AdminGraphics#AdminIcon": AdminIcon_cf05759dc79b7737cf5272e2ef70392b,
   "@/components/admin/AdminGraphics#AdminLogo": AdminLogo_cf05759dc79b7737cf5272e2ef70392b,
   "@/components/admin/PendingReviews#PendingReviews": PendingReviews_8c192d28e91779cb521705998bc5b833,
-  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
 }
