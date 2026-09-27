@@ -4,7 +4,7 @@ import { SectionHeader } from '@/components/ui/SectionHeader'
 import { landingCopy } from '@/content/landing'
 import type { ArticleRowView } from '@/lib/presenters'
 
-import { ArticleRow } from './ArticleRow'
+import { ArticleRow } from '@/components/articles/ArticleRow'
 import { EmptyState } from './EmptyState'
 
 export function RecentArticlesSection({ articles }: { articles: ArticleRowView[] }) {

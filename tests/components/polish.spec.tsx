@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
-import { ArticleRow } from '@/components/landing/ArticleRow'
+import { ArticleRow } from '@/components/articles/ArticleRow'
 import { Hero } from '@/components/landing/Hero'
 import { MobileMenu } from '@/components/layout/MobileMenu'
 import { ArrowLink } from '@/components/ui/ArrowLink'
