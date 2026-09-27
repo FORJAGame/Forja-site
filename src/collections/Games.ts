@@ -13,11 +13,15 @@ import {
   requireDraftModeForNonAdmins,
 } from '@/hooks/publication'
 import { revalidateAfterDelete, revalidateOnPublish } from '@/hooks/revalidation'
+import { previewAdminOptions } from '@/lib/preview'
 
 export const Games: CollectionConfig = {
   slug: 'games',
   labels: { singular: 'Jogo', plural: 'Jogos' },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'guild', 'developmentStatus', 'updatedAt'] },
+  admin: {
+    useAsTitle: 'title', defaultColumns: ['title', 'guild', 'developmentStatus', 'updatedAt'],
+    ...previewAdminOptions('games'),
+  },
   access: {
     read: publishedOrOwnGuild('guild'),
     readVersions: adminOrOwnGuild('version.guild'),

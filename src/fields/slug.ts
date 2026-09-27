@@ -15,7 +15,8 @@ export const slugField = (sourceField: string): Field => ({
   },
   hooks: {
     beforeValidate: [
-      ({ value, data }) => slugify(typeof value === 'string' && value ? value : String(data?.[sourceField] ?? '')),
+      ({ value, data }) =>
+        slugify(typeof value === 'string' && value ? value : String(data?.[sourceField] ?? '')) || null,
     ],
   },
 })

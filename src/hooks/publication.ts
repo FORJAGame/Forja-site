@@ -2,7 +2,11 @@ import { Forbidden, type CollectionBeforeChangeHook, type CollectionBeforeOperat
 
 import { isAdmin } from '@/access'
 
-export const draftVersions = { drafts: true, maxPerDoc: 25 } as const
+// Autosave keeps the live preview in sync while editors type; the explicit save button stays for reassurance.
+export const draftVersions = {
+  drafts: { autosave: { interval: 800, showSaveDraftButton: true } },
+  maxPerDoc: 25,
+} as const
 
 // A non-draft write goes straight to the live document (Payload's unpublish path), even with `_status: 'draft'`.
 export const requireDraftModeForNonAdmins: CollectionBeforeOperationHook = ({ args, operation, req }) => {
