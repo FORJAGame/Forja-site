@@ -165,7 +165,7 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 ## Arquivos
 
 - `DESIGN.md`: sistema visual normativo.
-- `forja_logo_whitered-2048x687.png`: logo oficial (branco e vermelho, para fundo escuro). O vermelho da marca é `#D21312`.
+- `public/brand/forja-logo.png`: logo oficial (branco e vermelho, para fundo escuro). O vermelho da marca é `#D21312`. As três fagulhas da logo estão redesenhadas em SVG em `src/components/brand/Shards.tsx`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
