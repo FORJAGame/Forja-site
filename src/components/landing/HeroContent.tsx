@@ -19,9 +19,9 @@ const lineVariants: Variants = {
   visible: { y: '0%', transition: { duration: DURATION.hero } },
 }
 
-const accentVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { delay: ACCENT_DELAY, duration: DURATION.micro * 2 } },
+const introLayerVariants: Variants = {
+  hidden: { opacity: 1 },
+  visible: { opacity: 0, transition: { delay: ACCENT_DELAY, duration: DURATION.micro * 2 } },
 }
 
 // The negative margin gives diacritics (the tilde in "SÃO") room inside the mask without changing the layout.
@@ -35,11 +35,18 @@ function MaskedLine({ children }: { children: ReactNode }) {
   )
 }
 
+// The word is red from the start; a white copy on top fades out to "light it up". A white copy underneath
+// the red one would leak through the anti-aliased edges as a light halo.
 function Accent({ children }: { children: string }) {
   return (
-    <span className="relative inline-block">
+    <span className="relative inline-block text-primary">
       {children}
-      <motion.span data-reveal aria-hidden="true" className="absolute inset-0 text-primary" variants={accentVariants}>
+      <motion.span
+        data-reveal-exit
+        aria-hidden="true"
+        className="absolute inset-0 text-on-surface"
+        variants={introLayerVariants}
+      >
         {children}
       </motion.span>
     </span>

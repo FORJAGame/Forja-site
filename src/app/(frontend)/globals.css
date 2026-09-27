@@ -12,6 +12,10 @@
   transform: none !important;
 }
 
+.no-js [data-reveal-exit] {
+  opacity: 0 !important;
+}
+
 @layer base {
   html {
     background-color: var(--color-neutral);

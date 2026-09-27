@@ -50,6 +50,16 @@ describe('Hero', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Onde jogos São forjados.' })).toBeInTheDocument()
   })
 
+  // A white copy underneath the red word leaked through its anti-aliased edges as a light halo.
+  it('draws the accent word in red itself, with the white intro layer only on top', () => {
+    render(<Hero guildCount={8} />)
+
+    const accentText = screen.getAllByText('forjados.').find((element) => !element.hasAttribute('aria-hidden'))
+    const introLayer = screen.getAllByText('forjados.').find((element) => element.hasAttribute('aria-hidden'))
+    expect(accentText?.closest('.text-primary')).not.toBeNull()
+    expect(introLayer).toHaveClass('text-on-surface')
+  })
+
   it('shows the live guild count and both calls to action', () => {
     render(<Hero guildCount={8} />)
 

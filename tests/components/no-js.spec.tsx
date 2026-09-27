@@ -41,4 +41,12 @@ describe('content without JavaScript', () => {
     for (const element of hidden) expect(element).toHaveAttribute('data-reveal')
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
   })
+
+  it('marks layers that start visible and fade out, so they stay hidden without JavaScript', () => {
+    const { container } = render(<Hero guildCount={8} />)
+
+    const exitLayers = container.querySelectorAll('[data-reveal-exit]')
+    expect(exitLayers.length).toBeGreaterThan(0)
+    for (const layer of exitLayers) expect(layer).toHaveAttribute('aria-hidden', 'true')
+  })
 })
