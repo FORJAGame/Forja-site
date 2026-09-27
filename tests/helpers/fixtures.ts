@@ -2,7 +2,7 @@ import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
 import { expect } from 'vitest'
 
-import type { Guild, User } from '@/payload-types'
+import type { Game, Guild, User } from '@/payload-types'
 import { slugify } from '@/utilities/slugify'
 
 export type TestUser = User & { collection: 'users' }
@@ -17,7 +17,7 @@ export const expectFieldError = async (operation: Promise<unknown>, path: string
   })
 }
 
-const COLLECTIONS_IN_DELETE_ORDER = ['users', 'guilds'] as const
+const COLLECTIONS_IN_DELETE_ORDER = ['games', 'users', 'guilds'] as const
 
 export const getTestPayload = (): Promise<Payload> => getPayload({ config })
 
@@ -54,6 +54,23 @@ export const createGuild = (payload: Payload, name: string, overrides: Partial<G
     data: { name, slug: slugify(name), shortDescription: `Guilda ${name}`, _status: 'published', ...overrides },
     overrideAccess: true,
   })
+
+export const createGame = (payload: Payload, guildId: number, overrides: Partial<Game> = {}): Promise<Game> => {
+  const title = overrides.title ?? 'Ecos de Ferro'
+  return payload.create({
+    collection: 'games',
+    data: {
+      title,
+      slug: slugify(title),
+      synopsis: 'Um metroidvania sobre uma ferreira que reconstrói uma cidade mecânica.',
+      guild: guildId,
+      developmentStatus: 'in-development',
+      _status: 'published',
+      ...overrides,
+    },
+    overrideAccess: true,
+  })
+}
 
 // The first user ever created becomes admin (see assignFirstUserAsAdmin), so the admin must come first.
 export const createBaseFixture = async (payload: Payload) => {

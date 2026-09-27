@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     guilds: Guild;
+    games: Game;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -79,6 +80,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     guilds: GuildsSelect<false> | GuildsSelect<true>;
+    games: GamesSelect<false> | GamesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -218,6 +220,57 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "games".
+ */
+export interface Game {
+  id: number;
+  title: string;
+  /**
+   * Gerado automaticamente a partir do nome. Aparece na URL.
+   */
+  slug: string;
+  /**
+   * Editores sempre publicam na própria guilda.
+   */
+  guild: number | Guild;
+  developmentStatus: 'in-development' | 'released' | 'paused';
+  /**
+   * Aparece nos cards. Até 280 caracteres.
+   */
+  synopsis: string;
+  cover?: (number | null) | Media;
+  gallery?: (number | Media)[] | null;
+  trailerUrl?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  platforms?: ('pc' | 'web' | 'mobile' | 'console')[] | null;
+  /**
+   * Normalmente a página do jogo na itch.io.
+   */
+  playUrl?: string | null;
+  credits?: string | null;
+  releaseDate?: string | null;
+  publishedBy?: (number | null) | User;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -247,6 +300,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'guilds';
         value: number | Guild;
+      } | null)
+    | ({
+        relationTo: 'games';
+        value: number | Game;
       } | null)
     | ({
         relationTo: 'media';
@@ -339,6 +396,30 @@ export interface GuildsSelect<T extends boolean = true> {
         id?: T;
       };
   members?: T;
+  publishedBy?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "games_select".
+ */
+export interface GamesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  guild?: T;
+  developmentStatus?: T;
+  synopsis?: T;
+  cover?: T;
+  gallery?: T;
+  trailerUrl?: T;
+  description?: T;
+  platforms?: T;
+  playUrl?: T;
+  credits?: T;
+  releaseDate?: T;
   publishedBy?: T;
   publishedAt?: T;
   updatedAt?: T;
