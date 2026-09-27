@@ -1,22 +1,29 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOnly, adminOrOwnGuild, anyone } from '@/access'
+import { adminOnly, adminOrOwnGuild, publishedOrOwnGuild } from '@/access'
+import { publicationFields } from '@/fields/publication'
 import { simpleRichTextEditor } from '@/fields/richText'
 import { slugField } from '@/fields/slug'
 import { validateRequiredHttpUrl } from '@/fields/validators'
 import { preventDeletingGuildInUse } from '@/hooks/preventDeletingGuildInUse'
+import { draftVersions, recordPublisher, requireDraftForNonAdmins } from '@/hooks/publication'
 
 export const Guilds: CollectionConfig = {
   slug: 'guilds',
   labels: { singular: 'Guilda', plural: 'Guildas' },
   admin: { useAsTitle: 'name', defaultColumns: ['name', 'slug', 'updatedAt'] },
   access: {
-    read: anyone,
+    read: publishedOrOwnGuild('id'),
+    readVersions: adminOrOwnGuild('id'),
     create: adminOnly,
     update: adminOrOwnGuild('id'),
     delete: adminOnly,
   },
-  hooks: { beforeDelete: [preventDeletingGuildInUse] },
+  versions: draftVersions,
+  hooks: {
+    beforeChange: [requireDraftForNonAdmins, recordPublisher],
+    beforeDelete: [preventDeletingGuildInUse],
+  },
   fields: [
     { name: 'name', label: 'Nome', type: 'text', required: true },
     slugField('name'),
@@ -59,5 +66,6 @@ export const Guilds: CollectionConfig = {
       type: 'textarea',
       admin: { description: 'Opcional. Um nome por linha.' },
     },
+    ...publicationFields,
   ],
 }

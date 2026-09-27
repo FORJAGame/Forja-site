@@ -23,18 +23,20 @@ describe('guilds', () => {
     expect(guild.slug).toBe('tempera')
   })
 
-  it('lets an editor update their own guild', async () => {
+  it('lets an editor save a draft of their own guild', async () => {
     const { editorA, guildA } = await createBaseFixture(payload)
 
     const updated = await payload.update({
       collection: 'guilds',
       id: guildA.id,
       data: { shortDescription: 'Narrativa e exploração.' },
+      draft: true,
       user: editorA,
       overrideAccess: false,
     })
 
     expect(updated.shortDescription).toBe('Narrativa e exploração.')
+    expect(updated._status).toBe('draft')
   })
 
   it('forbids an editor from updating another guild', async () => {
@@ -45,6 +47,7 @@ describe('guilds', () => {
         collection: 'guilds',
         id: guildB.id,
         data: { shortDescription: 'Invadido' },
+        draft: true,
         user: editorA,
         overrideAccess: false,
       }),

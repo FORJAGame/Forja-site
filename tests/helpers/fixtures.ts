@@ -51,7 +51,7 @@ export const createUser = async (
 export const createGuild = (payload: Payload, name: string, overrides: Partial<Guild> = {}): Promise<Guild> =>
   payload.create({
     collection: 'guilds',
-    data: { name, slug: slugify(name), shortDescription: `Guilda ${name}`, ...overrides },
+    data: { name, slug: slugify(name), shortDescription: `Guilda ${name}`, _status: 'published', ...overrides },
     overrideAccess: true,
   })
 

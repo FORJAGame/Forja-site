@@ -191,8 +191,11 @@ export interface Guild {
    * Opcional. Um nome por linha.
    */
   members?: string | null;
+  publishedBy?: (number | null) | User;
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -336,8 +339,11 @@ export interface GuildsSelect<T extends boolean = true> {
         id?: T;
       };
   members?: T;
+  publishedBy?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
