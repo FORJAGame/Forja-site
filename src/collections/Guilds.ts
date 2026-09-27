@@ -1,12 +1,17 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOnly, adminOrOwnGuild, publishedOrOwnGuild } from '@/access'
+import { adminOnly, adminOrOwnGuild, adminOrOwnGuildDraft, publishedOrOwnGuild } from '@/access'
 import { publicationFields } from '@/fields/publication'
 import { simpleRichTextEditor } from '@/fields/richText'
 import { slugField } from '@/fields/slug'
 import { validateRequiredHttpUrl } from '@/fields/validators'
 import { preventDeletingGuildInUse } from '@/hooks/preventDeletingGuildInUse'
-import { draftVersions, recordPublisher, requireDraftForNonAdmins } from '@/hooks/publication'
+import {
+  draftVersions,
+  recordPublisher,
+  requireDraftForNonAdmins,
+  requireDraftModeForNonAdmins,
+} from '@/hooks/publication'
 
 export const Guilds: CollectionConfig = {
   slug: 'guilds',
@@ -14,13 +19,14 @@ export const Guilds: CollectionConfig = {
   admin: { useAsTitle: 'name', defaultColumns: ['name', 'slug', 'updatedAt'] },
   access: {
     read: publishedOrOwnGuild('id'),
-    readVersions: adminOrOwnGuild('id'),
+    readVersions: adminOrOwnGuild('parent'),
     create: adminOnly,
-    update: adminOrOwnGuild('id'),
+    update: adminOrOwnGuildDraft('id'),
     delete: adminOnly,
   },
   versions: draftVersions,
   hooks: {
+    beforeOperation: [requireDraftModeForNonAdmins],
     beforeChange: [requireDraftForNonAdmins, recordPublisher],
     beforeDelete: [preventDeletingGuildInUse],
   },

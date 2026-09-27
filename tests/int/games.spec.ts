@@ -127,4 +127,48 @@ describe('games', () => {
       payload.delete({ collection: 'guilds', id: guildWithoutMembers.id, user: admin, overrideAccess: false }),
     ).rejects.toThrow('Esta guilda ainda tem membros ou jogos')
   })
+
+  it('forbids an editor from unpublishing a game outside draft mode', async () => {
+    const { editorA, guildA } = await createBaseFixture(payload)
+    const game = await createGame(payload, guildA.id)
+
+    await expect(
+      payload.update({
+        collection: 'games',
+        id: game.id,
+        data: { title: 'Vandalizado', _status: 'draft' },
+        user: editorA,
+        overrideAccess: false,
+      }),
+    ).rejects.toMatchObject({ status: 403 })
+
+    const { docs } = await payload.find({ collection: 'games', overrideAccess: false })
+    expect(docs.map((visible) => visible.title)).toEqual(['Ecos de Ferro'])
+  })
+
+  it('lets an editor read the version history of their own guild games only', async () => {
+    const { editorA, editorB, guildA, guildB } = await createBaseFixture(payload)
+    const gameA = await createGame(payload, guildA.id)
+    const gameB = await createGame(payload, guildB.id, { title: 'Maré Baixa' })
+    for (const [editor, game] of [
+      [editorA, gameA],
+      [editorB, gameB],
+    ] as const) {
+      await payload.update({
+        collection: 'games',
+        id: game.id,
+        data: { synopsis: 'Rascunho' },
+        draft: true,
+        user: editor,
+        overrideAccess: false,
+      })
+    }
+
+    const { docs } = await payload.findVersions({ collection: 'games', user: editorA, overrideAccess: false })
+    const { totalDocs } = await payload.countVersions({ collection: 'games', user: editorA, overrideAccess: false })
+
+    expect(docs.length).toBeGreaterThan(0)
+    expect(totalDocs).toBe(docs.length)
+    expect(new Set(docs.map((version) => version.parent))).toEqual(new Set([gameA.id]))
+  })
 })

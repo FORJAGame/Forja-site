@@ -5,6 +5,7 @@ import {
   adminOnlyField,
   adminOrGuildMember,
   adminOrOwnGuild,
+  adminOrOwnGuildDraft,
   adminOrSelf,
   getUserGuildId,
   isAdmin,
@@ -102,5 +103,22 @@ describe('publishedOrOwnGuild', () => {
 
   it('lets editors also read their own guild documents', () => {
     expect(access(argsFor(editor))).toEqual({ or: [published, { guild: { equals: 7 } }] })
+  })
+})
+
+describe('adminOrOwnGuildDraft', () => {
+  const access = adminOrOwnGuildDraft('guild')
+  const withData = (user: SessionUser | null, data: Record<string, unknown>) =>
+    ({ req: { user }, data }) as unknown as AccessArgs
+
+  it('never lets editors publish, so the admin UI hides the publish button for them', () => {
+    expect(access(withData(editor, { _status: 'published' }))).toBe(false)
+    expect(access(withData(admin, { _status: 'published' }))).toBe(true)
+  })
+
+  it('scopes draft saves to the editor guild', () => {
+    expect(access(withData(editor, { _status: 'draft' }))).toEqual({ guild: { equals: 7 } })
+    expect(access(argsFor(editor))).toEqual({ guild: { equals: 7 } })
+    expect(access(argsFor(null))).toBe(false)
   })
 })

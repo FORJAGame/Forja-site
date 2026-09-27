@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminOnly, adminOnlyField, adminOrSelf } from '@/access'
 import { assignFirstUserAsAdmin } from '@/hooks/assignFirstUserAsAdmin'
+import { keepOneAdminOnDelete, keepOneAdminOnDemotion } from '@/hooks/keepOneAdmin'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -14,7 +15,11 @@ export const Users: CollectionConfig = {
     update: adminOrSelf,
     delete: adminOnly,
   },
-  hooks: { beforeValidate: [assignFirstUserAsAdmin] },
+  hooks: {
+    beforeValidate: [assignFirstUserAsAdmin],
+    beforeChange: [keepOneAdminOnDemotion],
+    beforeDelete: [keepOneAdminOnDelete],
+  },
   fields: [
     { name: 'name', label: 'Nome', type: 'text', required: true },
     {

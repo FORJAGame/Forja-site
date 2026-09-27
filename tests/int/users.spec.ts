@@ -4,6 +4,7 @@ import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import {
   createBaseFixture,
   createGuild,
+  createUser,
   expectFieldError,
   getTestPayload,
   resetDatabase,
@@ -93,5 +94,42 @@ describe('users', () => {
         overrideAccess: false,
       }),
     ).rejects.toThrow()
+  })
+
+  it('refuses to demote the last admin', async () => {
+    const { admin } = await createBaseFixture(payload)
+
+    await expect(
+      payload.update({
+        collection: 'users',
+        id: admin.id,
+        data: { role: 'editor' },
+        user: admin,
+        overrideAccess: false,
+      }),
+    ).rejects.toThrow('A Forja precisa de pelo menos um admin')
+  })
+
+  it('refuses to delete the last admin', async () => {
+    const { admin } = await createBaseFixture(payload)
+
+    await expect(
+      payload.delete({ collection: 'users', id: admin.id, user: admin, overrideAccess: false }),
+    ).rejects.toThrow('A Forja precisa de pelo menos um admin')
+  })
+
+  it('lets an admin step down when another admin remains', async () => {
+    const { admin, guildA } = await createBaseFixture(payload)
+    await createUser(payload, { role: 'admin' })
+
+    const updated = await payload.update({
+      collection: 'users',
+      id: admin.id,
+      data: { role: 'editor', guild: guildA.id },
+      user: admin,
+      overrideAccess: false,
+    })
+
+    expect(updated.role).toBe('editor')
   })
 })

@@ -92,6 +92,7 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
 - **Repetir o destino do WordPress.** Se ninguém na Forja souber manter, o site morre igual. O risco principal é a entrega, não o código.
 - **Contas de infra** devem ser criadas numa organização no GitHub, com o e-mail institucional do CESAR (que é permanente), nunca com conta pessoal.
 - **Vercel Hobby** é para uso pessoal e não comercial, e não tem times (o Pro custa US$ 20 por membro/mês).
+- **Imagens são públicas:** qualquer upload em `media` pode ser listado e acessado por URL, inclusive imagens de jogos ainda em rascunho. Aceito por ora; avisar no guia de editores.
 - **Conteúdo desatualizado:** uma página de guilda parada passa a imagem de iniciativa morta.
 - **A coordenação ainda não foi consultada formalmente**, e o admin aprovador precisa topar o trabalho recorrente.
 
@@ -136,7 +137,9 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 ## Onde fica cada coisa
 
 - **Regras de acesso:** `src/access/index.ts` (funções puras, com teste unitário). As coleções só compõem essas funções.
-- **Fluxo de publicação:** `src/hooks/publication.ts`. Um não-admin só grava rascunho (`_status: 'draft'`), e publicar registra `publishedBy`/`publishedAt`. Vale para `guilds` e `games` (`versions: draftVersions`).
+- **Fluxo de publicação:** `src/hooks/publication.ts`. Um não-admin só grava em modo rascunho (`requireDraftModeForNonAdmins`, no `beforeOperation`, porque um save sem `draft` escreve direto no documento publicado, mesmo com `_status: 'draft'`) e nunca com `_status: 'published'`. Publicar registra `publishedBy`/`publishedAt`, que só admins podem escrever. O acesso `adminOrOwnGuildDraft` também esconde o botão "Publicar" dos editores. Vale para `guilds` e `games` (`versions: draftVersions`).
+- **Histórico de versões:** o `readVersions` consulta a tabela de versões, então usa `parent` (guildas) e `version.guild` (jogos), não os campos do documento.
+- **Sempre existe um admin:** `src/hooks/keepOneAdmin.ts` impede rebaixar ou excluir o último admin.
 - **Editor sempre na própria guilda:** `src/hooks/assignOwnGuild.ts` (jogos) e o acesso `adminOrOwnGuild`.
 - **Fila de aprovação:** `src/lib/pendingReviews.ts` + `src/components/admin/PendingReviews.tsx` (topo do dashboard, só para admins).
 - **Status do jogo** é o campo `developmentStatus` (em desenvolvimento / lançado / pausado). Não use `status`: o nome colide com o enum do `_status` de publicação no Postgres.

@@ -54,3 +54,11 @@ export const publishedOrOwnGuild =
     if (guildId === null) return published
     return { or: [published, { [guildField]: { equals: guildId } }] }
   }
+
+// Payload asks update access with `_status: 'published'` to decide whether to show the publish button.
+export const adminOrOwnGuildDraft =
+  (guildField: string): Access =>
+  (args) => {
+    if (!isAdmin(args.req.user) && args.data?._status === 'published') return false
+    return adminOrOwnGuild(guildField)(args)
+  }

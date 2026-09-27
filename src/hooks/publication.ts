@@ -1,8 +1,17 @@
-import { Forbidden, type CollectionBeforeChangeHook } from 'payload'
+import { Forbidden, type CollectionBeforeChangeHook, type CollectionBeforeOperationHook } from 'payload'
 
 import { isAdmin } from '@/access'
 
 export const draftVersions = { drafts: true, maxPerDoc: 25 } as const
+
+// A non-draft write goes straight to the live document (Payload's unpublish path), even with `_status: 'draft'`.
+export const requireDraftModeForNonAdmins: CollectionBeforeOperationHook = ({ args, operation, req }) => {
+  const writesLiveDocument = operation === 'update' || operation === 'restoreVersion'
+  if (writesLiveDocument && req.user && !isAdmin(req.user) && !args.draft) {
+    throw new Forbidden(req.t)
+  }
+  return args
+}
 
 // Requests without a user come from trusted server code (seed, scripts) running with overrideAccess.
 export const requireDraftForNonAdmins: CollectionBeforeChangeHook = ({ data, req }) => {

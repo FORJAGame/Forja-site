@@ -1,12 +1,17 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOnly, adminOrGuildMember, adminOrOwnGuild, publishedOrOwnGuild } from '@/access'
+import { adminOnly, adminOrGuildMember, adminOrOwnGuild, adminOrOwnGuildDraft, publishedOrOwnGuild } from '@/access'
 import { publicationFields } from '@/fields/publication'
 import { simpleRichTextEditor } from '@/fields/richText'
 import { slugField } from '@/fields/slug'
 import { validateOptionalHttpUrl, validateOptionalYouTubeUrl } from '@/fields/validators'
 import { assignOwnGuild } from '@/hooks/assignOwnGuild'
-import { draftVersions, recordPublisher, requireDraftForNonAdmins } from '@/hooks/publication'
+import {
+  draftVersions,
+  recordPublisher,
+  requireDraftForNonAdmins,
+  requireDraftModeForNonAdmins,
+} from '@/hooks/publication'
 
 export const Games: CollectionConfig = {
   slug: 'games',
@@ -14,13 +19,16 @@ export const Games: CollectionConfig = {
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'guild', 'developmentStatus', 'updatedAt'] },
   access: {
     read: publishedOrOwnGuild('guild'),
-    readVersions: adminOrOwnGuild('guild'),
+    readVersions: adminOrOwnGuild('version.guild'),
     create: adminOrGuildMember,
-    update: adminOrOwnGuild('guild'),
+    update: adminOrOwnGuildDraft('guild'),
     delete: adminOnly,
   },
   versions: draftVersions,
-  hooks: { beforeChange: [assignOwnGuild, requireDraftForNonAdmins, recordPublisher] },
+  hooks: {
+    beforeOperation: [requireDraftModeForNonAdmins],
+    beforeChange: [assignOwnGuild, requireDraftForNonAdmins, recordPublisher],
+  },
   fields: [
     { name: 'title', label: 'Título', type: 'text', required: true },
     slugField('title'),
