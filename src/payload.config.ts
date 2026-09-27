@@ -20,6 +20,13 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     components: {
       beforeDashboard: ['@/components/admin/PendingReviews#PendingReviews'],
+      graphics: {
+        Logo: '@/components/admin/AdminGraphics#AdminLogo',
+        Icon: '@/components/admin/AdminGraphics#AdminIcon',
+      },
+    },
+    meta: {
+      icons: [{ rel: 'icon', type: 'image/png', url: '/icon.png' }],
     },
   },
   collections: [Users, Guilds, Games, Articles, Media],
