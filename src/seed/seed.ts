@@ -1,33 +1,58 @@
+import { readFileSync } from 'node:fs'
+
 import type { Payload } from 'payload'
 
+import { readDesignTokens } from '@/design-system/tokens'
 import { slugify } from '@/utilities/slugify'
 
+import { LOCAL_SEED_ADMIN, type SeedAdmin } from './admin'
 import { articles, games, guilds } from './data'
+import { renderPlaceholderPng, type PlaceholderPalette } from './placeholderImage'
 
-export const SEED_ADMIN = { name: 'Admin Forja', email: 'admin@forja.local', password: 'forja-dev' }
+// The seed runs outside Next.js, where revalidatePath would throw. Each call needs its own context:
+// Payload's storage adapter writes flags into it, and a shared one makes later uploads skip storage.
+const trustedScript = () => ({ overrideAccess: true, context: { disableRevalidate: true } }) as const
 
-// The seed runs outside Next.js, where revalidatePath would throw.
-const trustedScript = { overrideAccess: true, context: { disableRevalidate: true } } as const
+const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds', 'media'] as const
 
-const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds'] as const
+const COVER = { width: 1600, height: 900 }
+const GALLERY_SIZE = 3
 
-export const seed = async (payload: Payload): Promise<void> => {
+const brandPalette = (): PlaceholderPalette => {
+  const { colors } = readDesignTokens(readFileSync('DESIGN.md', 'utf8'))
+  return { background: colors['surface-raised'], stripe: colors.ember, shard: colors.primary }
+}
+
+export const seed = async (payload: Payload, admin: SeedAdmin = LOCAL_SEED_ADMIN): Promise<void> => {
   if (process.env.NODE_ENV === 'production') {
     throw new Error('The seed wipes content and must never run in production.')
   }
 
   for (const collection of COLLECTIONS_IN_DELETE_ORDER) {
-    await payload.delete({ collection, where: { id: { exists: true } }, ...trustedScript })
+    await payload.delete({ collection, where: { id: { exists: true } }, ...trustedScript() })
   }
 
-  await payload.create({ collection: 'users', data: { ...SEED_ADMIN, role: 'admin' }, ...trustedScript })
+  await payload.create({ collection: 'users', data: { ...admin, role: 'admin' }, ...trustedScript() })
+
+  const palette = brandPalette()
+  let variant = 0
+  const uploadPlaceholder = async (alt: string, name: string): Promise<number> => {
+    const data = await renderPlaceholderPng(COVER.width, COVER.height, palette, variant++)
+    const media = await payload.create({
+      collection: 'media',
+      data: { alt },
+      file: { data, mimetype: 'image/png', name: `${name}.png`, size: data.length },
+      ...trustedScript(),
+    })
+    return media.id
+  }
 
   const guildIdByName = new Map<string, number>()
   for (const guild of guilds) {
     const created = await payload.create({
       collection: 'guilds',
       data: { ...guild, slug: slugify(guild.name), _status: 'published' },
-      ...trustedScript,
+      ...trustedScript(),
     })
     guildIdByName.set(guild.name, created.id)
   }
@@ -38,11 +63,22 @@ export const seed = async (payload: Payload): Promise<void> => {
     return id
   }
 
-  for (const { guildName, ...game } of games) {
+  for (const [index, { guildName, ...game }] of games.entries()) {
+    const slug = slugify(game.title)
+    const cover = await uploadPlaceholder(`Capa provisória de ${game.title}`, `${slug}-capa`)
+    const gallery =
+      index === 0
+        ? await Promise.all(
+            Array.from({ length: GALLERY_SIZE }, (_, shot) =>
+              uploadPlaceholder(`Imagem provisória ${shot + 1} de ${game.title}`, `${slug}-galeria-${shot + 1}`),
+            ),
+          )
+        : []
+
     await payload.create({
       collection: 'games',
-      data: { ...game, slug: slugify(game.title), guild: guildId(guildName), _status: 'published' },
-      ...trustedScript,
+      data: { ...game, slug, cover, gallery, guild: guildId(guildName), _status: 'published' },
+      ...trustedScript(),
     })
   }
 
@@ -50,7 +86,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     await payload.create({
       collection: 'articles',
       data: { ...article, guild: guildName ? guildId(guildName) : null },
-      ...trustedScript,
+      ...trustedScript(),
     })
   }
 }

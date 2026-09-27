@@ -1,31 +1,11 @@
-import { HeadObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import type { Payload } from 'payload'
 import sharp from 'sharp'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
-import { readServerEnv } from '@/config/env'
-
 import { getTestPayload, resetDatabase } from '../helpers/fixtures'
+import { objectExists } from '../helpers/storage'
 
 let payload: Payload
-
-const { storage } = readServerEnv()
-const s3 = new S3Client({
-  endpoint: storage.endpoint,
-  region: storage.region,
-  forcePathStyle: true,
-  credentials: { accessKeyId: storage.accessKeyId, secretAccessKey: storage.secretAccessKey },
-})
-
-const objectExists = async (key: string): Promise<boolean> => {
-  try {
-    await s3.send(new HeadObjectCommand({ Bucket: storage.bucket, Key: key }))
-    return true
-  } catch (error) {
-    if ((error as { $metadata?: { httpStatusCode?: number } }).$metadata?.httpStatusCode === 404) return false
-    throw error
-  }
-}
 
 const uploadTestImage = async () => {
   const png = await sharp({ create: { width: 32, height: 18, channels: 3, background: '#D21312' } }).png().toBuffer()
