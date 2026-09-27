@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts"
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
+    "tokens": "tsx scripts/generate-tokens.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",
@@ -26,6 +27,7 @@
     "@payloadcms/translations": "3.90.2",
     "@payloadcms/ui": "3.90.2",
     "cross-env": "^7.0.3",
+    "geist": "1.7.2",
     "graphql": "^16.8.1",
     "next": "16.3.6",
     "payload": "3.90.2",
@@ -34,6 +36,7 @@
     "sharp": "0.35.4"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
     "@types/node": "22.19.9",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
@@ -41,10 +44,12 @@
     "eslint": "^9.16.0",
     "eslint-config-next": "16.3.6",
     "prettier": "^3.4.2",
+    "tailwindcss": "4.3.3",
     "tsx": "4.22.4",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "6.0.5",
-    "vitest": "4.0.18"
+    "vitest": "4.0.18",
+    "yaml": "2.9.1"
   },
   "engines": {
     "node": ">=24",

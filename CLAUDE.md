@@ -129,6 +129,7 @@ pnpm build
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
+pnpm tokens                 # regenera src/styles/tokens.css a partir do DESIGN.md (o teste falha se esquecer)
 pnpm seed                   # APAGA e recria o conteúdo de exemplo no banco local (admin@forja.local / forja-dev)
 ```
 

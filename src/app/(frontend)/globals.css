@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+@import '../../styles/tokens.css';
+
+/* DESIGN.md › Motion: default easing. */
+@theme {
+  --ease-forge: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-neutral);
+    color: var(--color-on-surface);
+    color-scheme: dark;
+  }
+
+  body {
+    font-family: var(--font-inter), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary-text);
+    outline-offset: 2px;
+  }
+}

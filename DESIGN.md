@@ -63,6 +63,11 @@ typography:
     fontSize: 104px
     fontWeight: 800
     lineHeight: 0.9
+  stat-mobile:
+    fontFamily: Saira Condensed
+    fontSize: 56px
+    fontWeight: 800
+    lineHeight: 0.9
   body-lg:
     fontFamily: Inter
     fontSize: 20px
@@ -260,6 +265,7 @@ Regras:
 - **Ritmo vertical:** 120px entre seções no desktop e 72px no mobile. Cada seção é separada por uma linha fina (`divider`) no topo.
 - **Cabeçalho de seção:** rótulo mono numerado em `primary-text`, título grande em Saira Condensed em duas linhas e, à direita, um link "VER TODOS →" quando houver.
 - **Espaçamento:** tudo em múltiplos de 8px, com meio passo de 4px para ajustes finos.
+- **Breakpoints:** mobile até 767px; `md` a partir de 768px (grades de 2–3 colunas, espaçamentos de desktop); `lg` a partir de 1024px (grade de 4 colunas de guildas e o título `display-xl` do hero, que não cabe antes disso).
 
 ## Elevation & Depth
 
@@ -289,6 +295,8 @@ A forma é **reta e angular**, como os cortes da logo.
 - **Bloco "Apoie" (`cta-block`):** o único bloco com fundo vermelho no site, com fagulhas em preto a 22% e faixas diagonais pretas a 8–10%.
 - **Capa de placeholder:** gradiente diagonal de `ember` para `surface-raised`, com fagulhas pequenas a 45%. Aparece enquanto a guilda não sobe uma imagem.
 - **Rodapé:** a logo com uma frase curta, colunas (Navegação, Redes, Contato) e uma linha final em mono.
+- **Foco:** todo elemento interativo mostra, em `:focus-visible`, um contorno de 2px em `primary-text` com 2px de afastamento. Nunca remova o foco sem colocar outro indicador no lugar.
+- **Números grandes no mobile:** `stat-mobile` (56px) abaixo de `md`.
 
 ## Do's and Don'ts
 
