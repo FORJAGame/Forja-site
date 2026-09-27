@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    guilds: Guild;
     media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -77,6 +78,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    guilds: GuildsSelect<false> | GuildsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -123,6 +125,9 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name: string;
+  role: 'admin' | 'editor';
+  guild?: (number | null) | Guild;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -142,6 +147,52 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guilds".
+ */
+export interface Guild {
+  id: number;
+  name: string;
+  /**
+   * Gerado automaticamente a partir do nome. Aparece na URL.
+   */
+  slug: string;
+  /**
+   * Aparece nos cards. Até 160 caracteres.
+   */
+  shortDescription: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  logo?: (number | null) | Media;
+  cover?: (number | null) | Media;
+  links?:
+    | {
+        platform: 'instagram' | 'itch' | 'linkedin' | 'website' | 'other';
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Opcional. Um nome por linha.
+   */
+  members?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -189,6 +240,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'guilds';
+        value: number | Guild;
       } | null)
     | ({
         relationTo: 'media';
@@ -241,6 +296,9 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  guild?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -258,6 +316,28 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "guilds_select".
+ */
+export interface GuildsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  shortDescription?: T;
+  description?: T;
+  logo?: T;
+  cover?: T;
+  links?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  members?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
