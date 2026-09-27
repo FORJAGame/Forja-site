@@ -51,6 +51,47 @@ describe('MobileMenu', () => {
   })
 })
 
+describe('MobileMenu focus handling', () => {
+  const renderWithPage = () =>
+    render(
+      <>
+        <header>
+          <MobileMenu />
+        </header>
+        <main>
+          <a href="/jogos">Conteúdo</a>
+        </main>
+        <footer>
+          <a href="/artigos">Rodapé</a>
+        </footer>
+      </>,
+    )
+
+  it('returns focus to the menu button when closed with Escape from inside the menu', async () => {
+    const user = userEvent.setup()
+    renderWithPage()
+
+    await user.click(screen.getByRole('button', { name: 'Abrir menu' }))
+    screen.getByRole('link', { name: 'Jogos' }).focus()
+    await user.keyboard('{Escape}')
+
+    expect(screen.getByRole('button', { name: 'Abrir menu' })).toHaveFocus()
+  })
+
+  it('keeps keyboard users inside the open menu by making the page behind it inert', async () => {
+    const user = userEvent.setup()
+    const { container } = renderWithPage()
+
+    await user.click(screen.getByRole('button', { name: 'Abrir menu' }))
+    expect(container.querySelector('main')).toHaveAttribute('inert')
+    expect(container.querySelector('footer')).toHaveAttribute('inert')
+
+    await user.keyboard('{Escape}')
+    expect(container.querySelector('main')).not.toHaveAttribute('inert')
+    expect(container.querySelector('footer')).not.toHaveAttribute('inert')
+  })
+})
+
 describe('SiteFooter', () => {
   it('shows the contact e-mail as a mailto link', () => {
     render(<SiteFooter />)

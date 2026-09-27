@@ -6,6 +6,12 @@
   --ease-forge: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Without JavaScript Motion never runs: show every animated element in its final state. */
+.no-js [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @layer base {
   html {
     background-color: var(--color-neutral);

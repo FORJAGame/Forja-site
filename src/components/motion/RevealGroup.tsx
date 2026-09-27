@@ -41,7 +41,7 @@ export function RevealItem({ as = 'div', className, children }: RevealItemProps)
   const Item = ITEM_TAGS[as] as typeof motion.div
 
   return (
-    <Item className={className} variants={itemVariants}>
+    <Item data-reveal className={className} variants={itemVariants}>
       {children}
     </Item>
   )

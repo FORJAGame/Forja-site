@@ -12,6 +12,7 @@ type RevealProps = { className?: string; delay?: number; children: ReactNode }
 export function Reveal({ className, delay = 0, children }: RevealProps) {
   return (
     <motion.div
+      data-reveal
       className={className}
       initial={{ opacity: 0, y: REVEAL_OFFSET }}
       whileInView={{ opacity: 1, y: 0 }}

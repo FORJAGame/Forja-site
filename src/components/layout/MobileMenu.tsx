@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { siteConfig } from '@/config/site'
@@ -10,22 +10,38 @@ import { cx } from '@/utilities/cx'
 
 const BAR = 'h-0.5 w-[22px] bg-on-surface transition-transform duration-200 ease-forge'
 
+// The menu covers the page, so everything behind it must be unreachable by keyboard and scroll.
+const PAGE_BEHIND_MENU = 'main, footer'
+
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const toggleRef = useRef<HTMLButtonElement>(null)
   const close = () => setIsOpen(false)
 
   useEffect(() => {
     if (!isOpen) return
+    const pageBehind = document.querySelectorAll(PAGE_BEHIND_MENU)
+    pageBehind.forEach((element) => element.setAttribute('inert', ''))
+    document.body.style.overflow = 'hidden'
+
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false)
+      if (event.key !== 'Escape') return
+      setIsOpen(false)
+      toggleRef.current?.focus()
     }
     window.addEventListener('keydown', closeOnEscape)
-    return () => window.removeEventListener('keydown', closeOnEscape)
+
+    return () => {
+      window.removeEventListener('keydown', closeOnEscape)
+      pageBehind.forEach((element) => element.removeAttribute('inert'))
+      document.body.style.overflow = ''
+    }
   }, [isOpen])
 
   return (
     <div className="md:hidden">
       <button
+        ref={toggleRef}
         type="button"
         aria-expanded={isOpen}
         aria-controls="menu-mobile"

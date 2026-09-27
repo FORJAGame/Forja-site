@@ -15,6 +15,7 @@ export function HeroBackdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
       <motion.div
+        data-reveal
         className="absolute inset-0"
         initial={{ opacity: 0, x: -160 }}
         animate={{ opacity: 1, x: 0 }}
@@ -26,6 +27,7 @@ export function HeroBackdrop() {
         <svg viewBox="0 0 272 283" fill="currentColor" focusable="false" className="w-full text-primary">
           {SHARD_POLYGONS.map((points, index) => (
             <motion.polygon
+              data-reveal
               key={points}
               points={points}
               initial={{ opacity: 0, x: -60, y: 60, scale: 1.08 }}

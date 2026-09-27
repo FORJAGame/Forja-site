@@ -28,7 +28,7 @@ const accentVariants: Variants = {
 function MaskedLine({ children }: { children: ReactNode }) {
   return (
     <span className="-my-[0.14em] block overflow-hidden py-[0.14em]">
-      <motion.span className="block" variants={lineVariants}>
+      <motion.span data-reveal className="block" variants={lineVariants}>
         {children}
       </motion.span>
     </span>
@@ -39,7 +39,7 @@ function Accent({ children }: { children: string }) {
   return (
     <span className="relative inline-block">
       {children}
-      <motion.span aria-hidden="true" className="absolute inset-0 text-primary" variants={accentVariants}>
+      <motion.span data-reveal aria-hidden="true" className="absolute inset-0 text-primary" variants={accentVariants}>
         {children}
       </motion.span>
     </span>
@@ -52,7 +52,7 @@ export function HeroContent({ guildCount }: { guildCount: number }) {
 
   return (
     <div className="flex flex-col gap-lg">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
+      <motion.div data-reveal initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
         <Eyebrow>{hero.eyebrow}</Eyebrow>
       </motion.div>
       <motion.h1
@@ -68,6 +68,7 @@ export function HeroContent({ guildCount }: { guildCount: number }) {
         </MaskedLine>
       </motion.h1>
       <motion.div
+        data-reveal
         className="flex flex-col gap-lg"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
