@@ -70,10 +70,10 @@ describe('MobileMenu focus handling', () => {
           <MobileMenu />
         </header>
         <main>
-          <a href="/jogos">Conteúdo</a>
+          <a href="#conteudo">Conteúdo</a>
         </main>
         <footer>
-          <a href="/artigos">Rodapé</a>
+          <a href="#rodape">Rodapé</a>
         </footer>
       </>,
     )

@@ -26,6 +26,7 @@ type ButtonLinkProps = {
   variant?: ButtonVariant
   size?: ButtonSize
   arrow?: boolean
+  newTab?: boolean
   className?: string
   onClick?: () => void
   children: ReactNode
@@ -36,6 +37,7 @@ export function ButtonLink({
   variant = 'primary',
   size = 'md',
   arrow = false,
+  newTab = false,
   className,
   onClick,
   children,
@@ -54,7 +56,12 @@ export function ButtonLink({
   )
 
   return isExternalHref(href) ? (
-    <a href={href} className={classes} onClick={onClick}>
+    <a
+      href={href}
+      className={classes}
+      onClick={onClick}
+      {...(newTab && { target: '_blank', rel: 'noopener noreferrer' })}
+    >
       {content}
     </a>
   ) : (

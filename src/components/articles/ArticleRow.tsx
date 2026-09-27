@@ -2,14 +2,16 @@ import { Arrow } from '@/components/ui/Arrow'
 import { landingCopy } from '@/content/landing'
 import type { ArticleRowView } from '@/lib/presenters'
 
-export function ArticleRow({ article }: { article: ArticleRowView }) {
+type ArticleRowProps = { article: ArticleRowView; headingLevel?: 'h2' | 'h3' }
+
+export function ArticleRow({ article, headingLevel: Heading = 'h3' }: ArticleRowProps) {
   return (
     <article className="group relative flex flex-col gap-sm border-b border-outline py-lg md:flex-row md:items-center md:gap-2xl md:py-xl">
       <p className="type-label-mono min-w-0 break-words text-primary-text md:w-[220px] md:shrink-0">
         {article.venue}
       </p>
       <div className="flex min-w-0 flex-1 flex-col gap-sm">
-        <h3 className="type-headline-sm break-words md:type-title-list">
+        <Heading className="type-headline-sm break-words md:type-title-list">
           {article.url ? (
             <a
               href={article.url}
@@ -22,7 +24,7 @@ export function ArticleRow({ article }: { article: ArticleRowView }) {
           ) : (
             article.title
           )}
-        </h3>
+        </Heading>
         <p className="type-body-sm text-on-surface-muted">{article.authors}</p>
       </div>
       {article.url && (

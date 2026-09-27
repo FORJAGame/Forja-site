@@ -29,6 +29,17 @@ describe('ButtonLink', () => {
     expect(screen.getByText('→')).toHaveAttribute('aria-hidden', 'true')
   })
 
+  it('can open an external link in a new tab', () => {
+    render(
+      <ButtonLink href="https://itch.io" newTab>
+        Jogar
+      </ButtonLink>,
+    )
+    const link = screen.getByRole('link', { name: 'Jogar' })
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  })
+
   it('uses a plain anchor for mailto links', () => {
     render(
       <ButtonLink href="mailto:forja@exemplo.com" variant="onPrimary">
