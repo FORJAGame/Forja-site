@@ -128,9 +128,21 @@ pnpm build
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
+pnpm seed                   # APAGA e recria o conteúdo de exemplo no banco local (admin@forja.local / forja-dev)
 ```
 
 Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand -hex 32`). O pnpm 12 lê a liberação de build scripts do `pnpm-workspace.yaml` (`allowBuilds`), não do `package.json`.
+
+## Onde fica cada coisa
+
+- **Regras de acesso:** `src/access/index.ts` (funções puras, com teste unitário). As coleções só compõem essas funções.
+- **Fluxo de publicação:** `src/hooks/publication.ts`. Um não-admin só grava rascunho (`_status: 'draft'`), e publicar registra `publishedBy`/`publishedAt`. Vale para `guilds` e `games` (`versions: draftVersions`).
+- **Editor sempre na própria guilda:** `src/hooks/assignOwnGuild.ts` (jogos) e o acesso `adminOrOwnGuild`.
+- **Fila de aprovação:** `src/lib/pendingReviews.ts` + `src/components/admin/PendingReviews.tsx` (topo do dashboard, só para admins).
+- **Status do jogo** é o campo `developmentStatus` (em desenvolvimento / lançado / pausado). Não use `status`: o nome colide com o enum do `_status` de publicação no Postgres.
+- **Testes de integração** rodam o Payload de verdade contra o banco `forja_test`. Use as fábricas de `tests/helpers/fixtures.ts`. O primeiro usuário criado vira admin, então `createBaseFixture` cria o admin antes de tudo. Os tipos gerados exigem `slug` e `developmentStatus` na criação, mesmo com preenchimento automático, então fixtures e seed os passam explicitamente.
+
+**Armadilha da Local API:** `payload.find/update/...` usam `overrideAccess: true` por padrão. Em código que age em nome de alguém (páginas públicas, endpoints, testes de permissão), passe sempre `overrideAccess: false` e o `user` quando houver.
 
 ## Design: `DESIGN.md` é obrigatório
 
@@ -150,3 +162,13 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 
 - `DESIGN.md`: sistema visual normativo.
 - `forja_logo_whitered-2048x687.png`: logo oficial (branco e vermelho, para fundo escuro). O vermelho da marca é `#D21312`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
