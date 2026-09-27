@@ -22,7 +22,7 @@ export function HeroBackdrop() {
       >
         <DiagonalBands />
       </motion.div>
-      <Parallax className="absolute right-[-10%] top-[4%] w-[60%] max-w-[640px] md:right-[-2%] md:top-[12%] md:w-[44%]">
+      <Parallax className="absolute right-[-10%] top-[4%] w-[60%] max-w-[640px] md:right-[-4%] md:top-[12%] md:w-[38%]">
         <svg viewBox="0 0 272 283" fill="currentColor" focusable="false" className="w-full text-primary">
           {SHARD_POLYGONS.map((points, index) => (
             <motion.polygon

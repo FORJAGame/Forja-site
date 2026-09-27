@@ -15,7 +15,7 @@ const ACCENT_DELAY = 0.55
 const DETAILS_DELAY = 0.9
 
 const lineVariants: Variants = {
-  hidden: { y: '105%' },
+  hidden: { y: '140%' },
   visible: { y: '0%', transition: { duration: DURATION.hero } },
 }
 
@@ -24,9 +24,10 @@ const accentVariants: Variants = {
   visible: { opacity: 1, transition: { delay: ACCENT_DELAY, duration: DURATION.micro * 2 } },
 }
 
+// The negative margin gives diacritics (the tilde in "SÃO") room inside the mask without changing the layout.
 function MaskedLine({ children }: { children: ReactNode }) {
   return (
-    <span className="block overflow-hidden pb-[0.04em]">
+    <span className="-my-[0.14em] block overflow-hidden py-[0.14em]">
       <motion.span className="block" variants={lineVariants}>
         {children}
       </motion.span>

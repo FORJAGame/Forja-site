@@ -16,7 +16,7 @@ vi.mock('motion/react', async (importOriginal) => {
     ...actual,
     useReducedMotion: () => preferences.reduceMotion,
     animate: vi.fn(() => ({ stop: () => {} })),
-    useTransform: () => actual.motionValue(40),
+    useTransform: (_value: unknown, _input: number[], output: number[]) => actual.motionValue(output[1]),
   }
 })
 
@@ -46,7 +46,7 @@ describe('Parallax', () => {
   it('follows the scroll', () => {
     preferences.reduceMotion = false
     render(
-      <Parallax>
+      <Parallax distance={40}>
         <span>Fagulhas</span>
       </Parallax>,
     )
@@ -57,11 +57,28 @@ describe('Parallax', () => {
   it('stays still when motion is reduced', () => {
     preferences.reduceMotion = true
     render(
-      <Parallax>
+      <Parallax distance={40}>
         <span>Fagulhas</span>
       </Parallax>,
     )
 
-    expect(screen.getByText('Fagulhas').parentElement?.style.transform ?? '').not.toContain('translateY')
+    expect(screen.getByText('Fagulhas').parentElement?.style.transform ?? '').not.toContain('translateY(40px)')
+  })
+
+  // The server cannot know the visitor's preference, so the markup must not depend on it (hydration).
+  it('renders the same element attributes whatever the preference', () => {
+    const renderStyleAttribute = (reduceMotion: boolean) => {
+      preferences.reduceMotion = reduceMotion
+      const { container, unmount } = render(
+        <Parallax distance={40}>
+          <span>Fagulhas</span>
+        </Parallax>,
+      )
+      const hasStyle = container.firstElementChild?.hasAttribute('style')
+      unmount()
+      return hasStyle
+    }
+
+    expect(renderStyleAttribute(true)).toBe(renderStyleAttribute(false))
   })
 })

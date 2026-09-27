@@ -148,6 +148,21 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 
 **Armadilha da Local API:** `payload.find/update/...` usam `overrideAccess: true` por padrão. Em código que age em nome de alguém (páginas públicas, endpoints, testes de permissão), passe sempre `overrideAccess: false` e o `user` quando houver.
 
+## Front-end
+
+- **Tokens:** `DESIGN.md` → `pnpm tokens` → `src/styles/tokens.css` (gerado, não editar). O teste `tests/unit/tokens.spec.ts` falha se o arquivo estiver desatualizado. A paleta padrão do Tailwind está desligada: só existem as cores do `DESIGN.md`. A tipografia é usada pelas classes `type-<token>` (ex.: `type-headline-md`).
+- **Camadas de componentes** (`src/components/`):
+  - `ui/`: primitivos sem Payload (`ButtonLink`, `Card`, `Cover`, `StatusBadge`, `SectionHeader`…).
+  - `brand/`: logo, fagulhas (`Shards`) e faixas diagonais.
+  - `motion/`: `Reveal`, `RevealGroup`/`RevealItem`, `CountUp`, `Parallax` e `MotionProvider`. Toda animação nova passa por aqui.
+  - `layout/`: cabeçalho, menu mobile e rodapé.
+  - `landing/`: seções da página inicial.
+- **Dados:** páginas buscam com funções de `src/lib/queries/` (sempre como visitante, `overrideAccess: false`) e convertem documentos em *view models* em `src/lib/presenters.ts`. Os componentes nunca recebem documentos do Payload.
+- **Textos fixos da landing:** `src/content/landing.ts`. **Contatos e navegação:** `src/config/site.ts` (e-mail e redes ainda provisórios).
+- **Movimento reduzido:** o servidor não sabe a preferência do visitante. Nunca renderize marcação diferente com base em `useReducedMotion` (dá erro de hidratação). Zere o valor animado em vez de remover o atributo, como em `Parallax`.
+- **Testes de componente:** `tests/components/*.spec.tsx`, com `// @vitest-environment jsdom` e `import '../helpers/dom'` no topo.
+- `pnpm build` pré-renderiza a landing e precisa do Postgres de pé.
+
 ## Design: `DESIGN.md` é obrigatório
 
 **Toda decisão visual precisa estar em conformidade com `DESIGN.md`.** Ele segue o formato DESIGN.md do Google Stitch: tokens em YAML no frontmatter e as regras em prosa. Vale para cores, tipografia, espaçamento, cantos, componentes e layout de qualquer página, incluindo guilda, jogo e `/artigos`, não só a landing.
