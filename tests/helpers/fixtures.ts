@@ -2,7 +2,7 @@ import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
 import { expect } from 'vitest'
 
-import type { Game, Guild, User } from '@/payload-types'
+import type { Article, Game, Guild, User } from '@/payload-types'
 import { slugify } from '@/utilities/slugify'
 
 export type TestUser = User & { collection: 'users' }
@@ -71,6 +71,21 @@ export const createGame = (payload: Payload, guildId: number, overrides: Partial
     overrideAccess: true,
   })
 }
+
+export const createArticle = (payload: Payload, overrides: Partial<Article> = {}): Promise<Article> =>
+  payload.create({
+    collection: 'articles',
+    data: {
+      title: 'Geração procedural de masmorras',
+      description: 'Um estudo sobre geração de níveis.',
+      authors: [{ name: 'Ana Lima' }],
+      date: '2026-09-01T00:00:00.000Z',
+      venue: 'SBGames 2026',
+      url: 'https://doi.org/10.0000/exemplo',
+      ...overrides,
+    },
+    overrideAccess: true,
+  })
 
 // The first user ever created becomes admin (see assignFirstUserAsAdmin), so the admin must come first.
 export const createBaseFixture = async (payload: Payload) => {
