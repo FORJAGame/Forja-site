@@ -17,7 +17,7 @@ export function Cover({ image, ratio, sizes, className }: CoverProps) {
           alt={image.alt}
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-300 ease-forge group-hover:scale-[1.03]"
+          className="object-cover transition-transform duration-300 ease-forge group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
       ) : (
         <Shards className="absolute -bottom-[12%] right-[4%] w-[36%] text-primary opacity-45" />

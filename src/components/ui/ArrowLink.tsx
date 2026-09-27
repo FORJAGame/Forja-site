@@ -12,7 +12,7 @@ export function ArrowLink({ href, external = false, className, children }: Arrow
 
   return external ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
-      {children}
+      {children} <span className="sr-only">(abre em nova aba)</span>
       <Arrow external />
     </a>
   ) : (

@@ -7,6 +7,7 @@ import { DURATION } from '@/components/motion/tokens'
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { landingCopy } from '@/content/landing'
+import { pluralize } from '@/utilities/pluralize'
 
 // DESIGN.md › Motion › Hero: lines rise through a mask, the accent lights up last, then the rest fades in.
 const TITLE_DELAY = 0.35
@@ -55,7 +56,7 @@ function Accent({ children }: { children: string }) {
 
 export function HeroContent({ guildCount }: { guildCount: number }) {
   const { hero } = landingCopy
-  const pillars = [`${guildCount} guildas`, ...hero.pillars].join('  |  ')
+  const pillars = [pluralize(guildCount, 'guilda', 'guildas'), ...hero.pillars].join('  |  ')
 
   return (
     <div className="flex flex-col gap-lg">

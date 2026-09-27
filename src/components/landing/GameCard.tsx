@@ -15,7 +15,7 @@ export function GameCard({ game }: { game: GameCardView }) {
         <h3 className="type-headline-md break-words">
           <CardLink href={game.href}>{game.title}</CardLink>
         </h3>
-        <p className="type-body-sm text-on-surface-variant">{game.synopsis}</p>
+        <p className="type-body-sm break-words text-on-surface-variant">{game.synopsis}</p>
         {tags.length > 0 && <ChipList label="Guilda e plataformas" items={tags} className="mt-auto" />}
       </div>
     </Card>

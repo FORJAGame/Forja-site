@@ -62,6 +62,10 @@ describe('toGuildCard', () => {
     })
   })
 
+  it('keeps emoji intact in the initials', () => {
+    expect(toGuildCard({ ...guild, name: '🔥Brasa' }, 0).initials).toBe('🔥B')
+  })
+
   it('omits members when the guild did not list any', () => {
     expect(toGuildCard({ ...guild, members: null }, 1).meta).toBe('1 jogo')
   })
@@ -91,6 +95,10 @@ describe('toGameCard', () => {
 })
 
 describe('toArticleRow', () => {
+  it('keeps a missing URL as null instead of an empty link', () => {
+    expect(toArticleRow({ ...article, url: null }).url).toBeNull()
+  })
+
   it('joins the authors and keeps the external link', () => {
     expect(toArticleRow(article)).toEqual({
       id: 3,

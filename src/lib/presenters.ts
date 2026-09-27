@@ -27,7 +27,7 @@ export type GameCardView = {
 export type ArticleRowView = {
   id: number
   title: string
-  url: string
+  url: string | null
   venue: string
   authors: string
   date: string
@@ -54,7 +54,7 @@ export const toGuildCard = (guild: Guild, gameCount: number): GuildCardView => {
     name: guild.name,
     href: `/guildas/${guild.slug}`,
     focus: guild.shortDescription,
-    initials: guild.name.slice(0, 2),
+    initials: Array.from(guild.name).slice(0, 2).join(''),
     logo: toMediaView(guild.logo),
     meta,
   }
@@ -74,7 +74,7 @@ export const toGameCard = (game: Game): GameCardView => ({
 export const toArticleRow = (article: Article): ArticleRowView => ({
   id: article.id,
   title: article.title,
-  url: article.url ?? '',
+  url: article.url ?? null,
   venue: article.venue,
   authors: article.authors.map((author) => author.name).join(', '),
   date: article.date,

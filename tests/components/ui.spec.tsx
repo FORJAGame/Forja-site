@@ -48,7 +48,7 @@ describe('ArrowLink', () => {
       </ArrowLink>,
     )
 
-    const link = screen.getByRole('link', { name: 'Ler publicação' })
+    const link = screen.getByRole('link', { name: 'Ler publicação (abre em nova aba)' })
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
     expect(screen.getByText('↗')).toHaveAttribute('aria-hidden', 'true')

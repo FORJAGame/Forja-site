@@ -44,7 +44,7 @@ export function MobileMenu() {
         ref={toggleRef}
         type="button"
         aria-expanded={isOpen}
-        aria-controls="menu-mobile"
+        aria-controls={isOpen ? 'menu-mobile' : undefined}
         aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
         onClick={() => setIsOpen((open) => !open)}
         className="flex size-11 flex-col items-center justify-center gap-[5px]"

@@ -123,7 +123,7 @@ describe('RecentArticlesSection', () => {
   it('links each article to the external publication in a new tab', () => {
     render(<RecentArticlesSection articles={[article]} />)
 
-    const link = screen.getByRole('link', { name: 'Masmorras procedurais' })
+    const link = screen.getByRole('link', { name: 'Masmorras procedurais (abre em nova aba)' })
     expect(link).toHaveAttribute('href', 'https://doi.org/10.1/x')
     expect(link).toHaveAttribute('target', '_blank')
     expect(screen.getByText('Ana Lima, Pedro Souza')).toBeInTheDocument()
