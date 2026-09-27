@@ -126,6 +126,7 @@ spacing:
   margin: 120px
   margin-mobile: 24px
   content-max: 1200px
+  measure: 680px
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -265,6 +266,7 @@ Regras:
 - **Ritmo vertical:** 120px entre seções no desktop e 72px no mobile. Cada seção é separada por uma linha fina (`divider`) no topo.
 - **Cabeçalho de seção:** rótulo mono numerado em `primary-text`, título grande em Saira Condensed em duas linhas e, à direita, um link "VER TODOS →" quando houver.
 - **Espaçamento:** tudo em múltiplos de 8px, com meio passo de 4px para ajustes finos.
+- **Medida de leitura (`measure`, 680px):** largura máxima de texto corrido (descrições, rich text, subtítulos longos), para as linhas não passarem de ~75 caracteres.
 - **Breakpoints:** mobile até 767px; `md` a partir de 768px (grades de 2–3 colunas, espaçamentos de desktop); `lg` a partir de 1024px (grade de 4 colunas de guildas e o título `display-xl` do hero, que não cabe antes disso).
 
 ## Elevation & Depth
@@ -297,6 +299,13 @@ A forma é **reta e angular**, como os cortes da logo.
 - **Rodapé:** a logo com uma frase curta, colunas (Navegação, Redes, Contato) e uma linha final em mono.
 - **Foco:** todo elemento interativo mostra, em `:focus-visible`, um contorno de 2px em `primary-text` com 2px de afastamento. Nunca remova o foco sem colocar outro indicador no lugar.
 - **Números grandes no mobile:** `stat-mobile` (56px) abaixo de `md`.
+- **Cabeçalho de página (`PageHeader`):** usado nas páginas internas. Rótulo mono em `primary-text`, título `headline-lg` (48px no mobile) com quebras intencionais e, opcionalmente, um parágrafo `body-lg` em `on-surface-variant` limitado à `measure`. É o único `h1` da página.
+- **Link de volta (`BackLink`):** "← Todas as guildas", em `type-button` e `on-surface-variant`, no topo das páginas de detalhe. A seta desloca 4px para a esquerda no hover.
+- **Rich text:** parágrafos `body-lg` em `on-surface-variant`; `h2` em `headline-sm` (menor que o título da seção, que é `headline-md`) e `h3` em `body-lg` peso 600, ambos em `on-surface`; listas com marcador quadrado em `primary`; links em `on-surface` sublinhados (nunca vermelhos); tudo limitado à `measure`.
+- **Setas (→ ↗ ←):** sempre desenhadas com a Inter, mesmo dentro de textos em Saira Condensed, que não tem esses glifos (o navegador cairia numa fonte de emoji).
+- **Trailer:** embed do YouTube em modo sem cookies (`youtube-nocookie.com`), 16:9, com borda `outline` e cantos retos. Carrega sob demanda (`loading="lazy"`).
+- **Galeria:** grade de imagens 16:9 com cantos retos; 1 coluna no mobile, 2 em `md`, 3 em `lg`; `gap` de `md`.
+- **Faixa de pré-visualização:** barra fixa no rodapé da tela, fundo `surface-raised` com borda superior `primary`, rótulo mono "Pré-visualização do rascunho" em `primary-text` e o link "Sair da pré-visualização". Só aparece para quem abriu o preview pelo painel.
 
 ## Do's and Don'ts
 
@@ -351,3 +360,13 @@ Estrutura da landing (`/`):
 8. **Rodapé.**
 
 As páginas internas (guilda, jogo, `/artigos`) reaproveitam os mesmos componentes: cabeçalho de seção, cards, linha de artigo e badges.
+
+Páginas internas (mesmo cabeçalho, rodapé e tokens da landing; sem hero cinematográfico). Protótipo: Figma, página `03 · Páginas internas`.
+
+- **`/guildas`:** `PageHeader` ("Guildas" / "Todas as\nguildas."), grade de cards de guilda (4 colunas em `lg`, 2 em `md`, lista compacta no mobile), em ordem alfabética.
+- **`/guildas/[slug]`:** `BackLink`; capa `banner` (12:5, placeholder de fagulhas); identidade (avatar, rótulo "Guilda", nome em `headline-lg`, descrição curta); links externos (Instagram, itch.io…) como `ArrowLink` ↗; seções "Sobre" (rich text), "Jogos" (grade de cards de jogo) e "Membros" (lista em colunas), cada uma só se tiver conteúdo.
+- **`/jogos`:** `PageHeader` ("Jogos" / "Feito nas\nguildas."), grade de cards de jogo (3 colunas em `lg`, 2 em `md`, 1 no mobile), mais recentes primeiro.
+- **`/jogos/[slug]`:** `BackLink`; em `lg`, duas colunas: à esquerda status, título `headline-lg`, guilda (link), sinopse `body-lg`, botão "Jogar" (primário, se houver link), plataformas e data; à direita a capa 16:9. Abaixo, seções "Trailer", "Sobre o jogo" (rich text), "Galeria" e "Créditos", cada uma só se tiver conteúdo.
+- **`/artigos`:** `PageHeader` ("Pesquisa" / "Artigos das\nguildas."), lista de linhas de artigo, mais recentes primeiro.
+- **Página não encontrada:** rótulo "404", título "Página não\nencontrada." e botão "Voltar ao início".
+- Seções internas usam `SectionTitle` (`h2` em `headline-md`) em vez do cabeçalho numerado da landing. Cards lado a lado têm sempre a mesma altura.
