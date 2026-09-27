@@ -93,6 +93,7 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
 - **Contas de infra** devem ser criadas numa organização no GitHub, com o e-mail institucional do CESAR (que é permanente), nunca com conta pessoal.
 - **Vercel Hobby** é para uso pessoal e não comercial, e não tem times (o Pro custa US$ 20 por membro/mês).
 - **Imagens são públicas:** qualquer upload em `media` pode ser listado e acessado por URL, inclusive imagens de jogos ainda em rascunho. Aceito por ora; avisar no guia de editores.
+- **Autosave enche a fila de aprovação:** com o autosave, uma edição em andamento já aparece em "Aguardando aprovação". Os admins devem aprovar quando o editor avisar que terminou.
 - **Conteúdo desatualizado:** uma página de guilda parada passa a imagem de iniciativa morta.
 - **A coordenação ainda não foi consultada formalmente**, e o admin aprovador precisa topar o trabalho recorrente.
 
@@ -162,6 +163,10 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 - **Movimento reduzido:** o servidor não sabe a preferência do visitante. Nunca renderize marcação diferente com base em `useReducedMotion` (dá erro de hidratação). Zere o valor animado em vez de remover o atributo, como em `Parallax`.
 - **Testes de componente:** `tests/components/*.spec.tsx`, com `// @vitest-environment jsdom` e `import '../helpers/dom'` no topo.
 - `pnpm build` pré-renderiza a landing e precisa do Postgres de pé.
+- **Páginas internas:** `/guildas`, `/guildas/[slug]`, `/jogos`, `/jogos/[slug]`, `/artigos`. Componentes por domínio em `components/guilds`, `components/games`, `components/articles` (cards e grades são compartilhados com a landing). Rich text do Lexical só em `components/content/RichTextContent.tsx`.
+- **Publicar atualiza o site:** `src/hooks/revalidation.ts` chama `revalidatePath` para todas as rotas públicas quando algo é publicado ou excluído. Rascunhos e autosave não mexem no cache. Scripts fora do Next (seed) passam `context: { disableRevalidate: true }`; os testes mocam `next/cache` em `vitest.setup.ts`. A revalidação só é visível em `pnpm build && pnpm start` (no `pnpm dev` tudo renderiza a cada visita).
+- **Live preview:** o painel abre `/preview?collection=…&id=…` (`src/lib/preview.ts`); a rota confere o login, liga o `draftMode` e redireciona. As páginas de detalhe usam `resolveViewer` e buscam o rascunho **como o usuário do painel** (as regras de acesso valem também no preview); listas e grades mostram sempre a versão publicada. O autosave (800ms) mantém o preview atualizado.
+- **Sem JavaScript:** elementos que começam escondidos para animar levam `data-reveal` (ou `data-reveal-exit`, para camadas que somem), e o CSS `@media (scripting: none)` em `globals.css` os mostra no estado final. Não use `<script>` inline no layout: o React reclama quando renderiza a 404 no navegador.
 
 ## Design: `DESIGN.md` é obrigatório
 

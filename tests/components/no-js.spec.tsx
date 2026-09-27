@@ -9,7 +9,7 @@ import { Reveal } from '@/components/motion/Reveal'
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup'
 
 // Without JavaScript Motion never runs, so every element that starts hidden must be reachable by the
-// `.no-js [data-reveal]` CSS rule that forces it back to its final state.
+// `@media (scripting: none) [data-reveal]` CSS rule that forces it back to its final state.
 const startsHidden = (element: Element) => {
   const style = (element as HTMLElement).style
   return style.opacity === '0' || /translate/.test(style.transform)

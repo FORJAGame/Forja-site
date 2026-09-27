@@ -7,13 +7,15 @@
 }
 
 /* Without JavaScript Motion never runs: show every animated element in its final state. */
-.no-js [data-reveal] {
-  opacity: 1 !important;
-  transform: none !important;
-}
+@media (scripting: none) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 
-.no-js [data-reveal-exit] {
-  opacity: 0 !important;
+  [data-reveal-exit] {
+    opacity: 0 !important;
+  }
 }
 
 @layer base {

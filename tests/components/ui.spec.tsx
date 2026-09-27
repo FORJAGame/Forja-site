@@ -31,12 +31,13 @@ describe('ButtonLink', () => {
 
   it('can open an external link in a new tab', () => {
     render(
-      <ButtonLink href="https://itch.io" newTab>
+      <ButtonLink href="https://itch.io" newTab arrow>
         Jogar
       </ButtonLink>,
     )
     const link = screen.getByRole('link', { name: 'Jogar' })
     expect(link).toHaveAttribute('target', '_blank')
+    expect(screen.getByText('↗')).toHaveAttribute('aria-hidden', 'true')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 

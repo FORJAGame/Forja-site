@@ -51,7 +51,7 @@ export function ButtonLink({
   const content = (
     <>
       {children}
-      {arrow && <Arrow />}
+      {arrow && <Arrow external={newTab} />}
     </>
   )
 
