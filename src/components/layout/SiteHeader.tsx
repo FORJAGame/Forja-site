@@ -9,7 +9,9 @@ import { MobileMenu } from './MobileMenu'
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-outline bg-neutral/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-outline">
+      {/* The blur lives on its own layer: on the header it would trap the fixed mobile menu inside it. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-neutral/85 backdrop-blur-md" />
       <a
         href="#conteudo"
         className="type-button sr-only focus:not-sr-only focus:absolute focus:left-md focus:top-md focus:z-50 focus:bg-primary focus:px-md focus:py-sm"

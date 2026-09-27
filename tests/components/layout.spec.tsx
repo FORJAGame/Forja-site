@@ -27,6 +27,17 @@ describe('SiteHeader', () => {
   })
 })
 
+describe('SiteHeader and the fixed mobile menu', () => {
+  // backdrop-filter, filter or transform on an ancestor becomes the containing block of `position: fixed`
+  // children, which squeezed the full-screen menu into the 64px header (see the menu bug of 2026-09-27).
+  it('keeps the header itself free of properties that trap the fixed menu', () => {
+    const { container } = render(<SiteHeader />)
+    const header = container.querySelector('header')
+
+    expect(header?.className).not.toMatch(/(^|\s)(backdrop-|filter|blur-|transform|translate-|scale-|rotate-)/)
+  })
+})
+
 describe('MobileMenu', () => {
   it('opens and closes with the button, announcing its state', async () => {
     const user = userEvent.setup()
