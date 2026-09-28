@@ -119,6 +119,7 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
   - Estilos só com tokens do `DESIGN.md`, sem cores ou tamanhos soltos.
   - Antes de criar um componente, procure um existente que resolva com uma nova variação.
 - **Animações** também usam componentes reutilizáveis (ex.: um wrapper de "reveal"). Não espalhe configurações de Motion pelas seções.
+- **Commits:** **NUNCA** inclua linhas de atribuição da IA na mensagem, como `Co-Authored-By: Claude …` ou `Claude-Session: https://claude.ai/code/session_…`. Vale também para descrições de PR.
 
 ## Comandos
 
