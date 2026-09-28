@@ -4,7 +4,6 @@ import { cx } from '@/utilities/cx'
 
 const TONE_CLASSES = {
   accent: 'text-primary-text',
-  muted: 'text-on-surface-muted',
   onPrimary: 'text-on-primary',
 } as const
 

@@ -10,7 +10,7 @@ import { RecentArticlesSection } from '@/components/landing/RecentArticlesSectio
 import { SupportSection } from '@/components/landing/SupportSection'
 import { getLandingData } from '@/lib/queries/landing'
 
-// On-demand revalidation on publish arrives in Plan 3; until then the landing refreshes every minute.
+// Publishing already refreshes the site (src/hooks/revalidation.ts); the timer is only a safety net.
 export const revalidate = 60
 
 export default async function HomePage() {
