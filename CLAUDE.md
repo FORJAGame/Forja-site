@@ -130,6 +130,7 @@ pnpm test                   # Vitest (usa o banco forja_test; precisa do db:up)
 pnpm test tests/int/games.spec.ts -t "nome do teste"   # um arquivo ou um teste
 pnpm typecheck && pnpm lint
 pnpm build
+pnpm build:deploy           # build do Railway (railway.json): migra o banco, builda e copia public/ e .next/static/ para o standalone
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
