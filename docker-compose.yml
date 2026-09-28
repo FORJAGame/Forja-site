@@ -22,8 +22,10 @@ services:
     image: chrislusf/seaweedfs:4.47
     restart: unless-stopped
     command: server -dir=/data -s3 -s3.port=8333 -s3.config=/etc/seaweedfs/s3.json
+    # Bound to this machine only: the dev credentials are public. 8333 is the S3 API, 8888 the Filer file browser.
     ports:
-      - '8333:8333'
+      - '127.0.0.1:8333:8333'
+      - '127.0.0.1:8888:8888'
     volumes:
       - storagedata:/data
       - ./docker/seaweedfs/s3.json:/etc/seaweedfs/s3.json:ro

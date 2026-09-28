@@ -13,6 +13,8 @@ Requisitos: Node 24+, pnpm 12 e Docker.
 4. `pnpm seed` — conteúdo de exemplo. **Apaga** o conteúdo local. Login: `admin@forja.local` / `forja-dev`.
 5. `pnpm dev` — site em http://localhost:3000, painel em http://localhost:3000/admin.
 
+Para ver os arquivos de imagem guardados localmente, abra o Filer do SeaweedFS em http://localhost:8888/buckets/forja-media/. Use só para olhar: apagar ou enviar por lá não passa pelo Payload, e a imagem quebra no site. Para mexer em imagens, use o painel.
+
 Os outros comandos (testes, tipos, migrações) estão no `CLAUDE.md`, seção "Comandos".
 
 ## Variáveis de ambiente
