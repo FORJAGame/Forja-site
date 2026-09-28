@@ -1,8 +1,7 @@
 import type { Payload } from 'payload'
 
+import type { PageCollection } from '@/lib/paths'
 import { PUBLIC_VIEWER, queryOptionsFor, type Viewer } from '@/lib/viewer'
-
-type PageCollection = 'guilds' | 'games'
 
 const findBySlug = async <TCollection extends PageCollection>(
   payload: Payload,
