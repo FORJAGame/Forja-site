@@ -29,7 +29,7 @@ Um único app Next.js, com um único deploy:
 | Banco | **Postgres**: Neon em produção, Docker Compose no ambiente local |
 | Acesso a dados | **Adaptador Postgres do Payload** (`@payloadcms/db-postgres`) e **Local API** (`payload.find()`, etc.) |
 | Mídia | `@payloadcms/storage-s3`: **SeaweedFS** no ambiente local (Docker Compose) e **Cloudflare R2** no deploy. O Payload serve as imagens por `/api/media/file/...`; o bucket fica privado. Vídeo só por embed do YouTube. |
-| Estilo | **Tailwind v4**, com os tokens do `DESIGN.md` no `@theme` |
+| Estilo | **Tailwind v4**, com os tokens no `@theme` de `src/styles/tokens.css` |
 | Fontes | `next/font` (Saira Condensed, Inter) e o pacote `geist` (Geist Mono) |
 | Animação | **Motion** (`motion/react`), seguindo a seção `## Motion` do `DESIGN.md` |
 | Rich text | Lexical (padrão do Payload), limitado a poucos blocos para manter o template fixo |
@@ -116,7 +116,7 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
   - Um componente por responsabilidade. Os componentes de UI (botão, card, badge, cabeçalho de seção…) ficam separados das seções da página e não sabem nada do Payload: recebem props simples e tipadas.
   - As seções e as páginas buscam os dados e montam a tela a partir desses componentes.
   - As variações (ex.: botão `primary`/`secondary`/`onPrimary`, status do jogo) são uma prop do mesmo componente, não componentes duplicados.
-  - Estilos só com tokens do `DESIGN.md`, sem cores ou tamanhos soltos.
+  - Estilos só com os tokens (`src/styles/tokens.css`), sem cores ou tamanhos soltos.
   - Antes de criar um componente, procure um existente que resolva com uma nova variação.
 - **Animações** também usam componentes reutilizáveis (ex.: um wrapper de "reveal"). Não espalhe configurações de Motion pelas seções.
 - **Commits:** **NUNCA** inclua linhas de atribuição da IA na mensagem, como `Co-Authored-By: Claude …` ou `Claude-Session: https://claude.ai/code/session_…`. Vale também para descrições de PR.
@@ -133,7 +133,6 @@ pnpm build
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
-pnpm tokens                 # regenera src/styles/tokens.css a partir do DESIGN.md (o teste falha se esquecer)
 pnpm seed                   # APAGA e recria o conteúdo de exemplo, com imagens (admin@forja.local / forja-dev só em banco local; banco remoto exige SEED_CONFIRM_REMOTE_WIPE=yes)
 ```
 
@@ -159,7 +158,7 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 
 ## Front-end
 
-- **Tokens:** `DESIGN.md` → `pnpm tokens` → `src/styles/tokens.css` (gerado, não editar). O teste `tests/unit/tokens.spec.ts` falha se o arquivo estiver desatualizado. A paleta padrão do Tailwind está desligada: só existem as cores do `DESIGN.md`. A tipografia é usada pelas classes `type-<token>` (ex.: `type-headline-md`).
+- **Tokens:** `src/styles/tokens.css` é a fonte única dos valores (o `@theme` do Tailwind). O `DESIGN.md` só cita os nomes. A paleta padrão do Tailwind está desligada: só existem as cores desse arquivo. A tipografia é usada pelas classes `type-<token>` (ex.: `type-headline-md`).
 - **Camadas de componentes** (`src/components/`):
   - `ui/`: primitivos sem Payload (`ButtonLink`, `Card`, `Cover`, `StatusBadge`, `SectionHeader`…).
   - `brand/`: logo, fagulhas (`Shards`) e faixas diagonais.
@@ -178,21 +177,18 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 
 ## Design: `DESIGN.md` é obrigatório
 
-**Toda decisão visual precisa estar em conformidade com `DESIGN.md`.** Ele segue o formato DESIGN.md do Google Stitch: tokens em YAML no frontmatter e as regras em prosa. Vale para cores, tipografia, espaçamento, cantos, componentes e layout de qualquer página, incluindo guilda, jogo e `/artigos`, não só a landing.
+**Toda decisão visual precisa estar em conformidade com `DESIGN.md`.** Ele descreve em prosa quando e como usar cada token; os valores ficam em `src/styles/tokens.css`. Leia os dois antes de qualquer trabalho visual. Vale para cores, tipografia, espaçamento, cantos, componentes e layout de qualquer página, incluindo guilda, jogo e `/artigos`, não só a landing.
 
-- Use os tokens do `DESIGN.md` (ex.: `primary`, `headline-lg`, `spacing.section`). Não use valores soltos no código.
+- Use os tokens (ex.: `bg-primary`, `type-headline-lg`, `py-section`). Não use valores soltos no código.
 - Antes de criar um componente novo, veja se ele já está descrito em `## Components` ou em `## Page Patterns`. Para animações, siga `## Motion`.
 - Se uma decisão exigir algo que o `DESIGN.md` não cobre ou que o contradiz, **atualize o `DESIGN.md` primeiro** (com o motivo) e só depois implemente. Nunca diverja em silêncio.
-- Depois de editar o arquivo, valide com o linter oficial. Os avisos de `borderColor` são intencionais.
-  ```
-  npx -y -p @google/design.md designmd lint DESIGN.md
-  ```
 - Protótipo de referência no Figma: https://www.figma.com/design/qLr3pgjNo0az2ZJVdMaBaQ/Forja (página `02 · Landing`, desktop e mobile). Onde o Figma e o `DESIGN.md` divergirem, vale o `DESIGN.md`.
 
 
 ## Arquivos
 
-- `DESIGN.md`: sistema visual normativo.
+- `DESIGN.md`: sistema visual normativo (regras em prosa).
+- `src/styles/tokens.css`: valores dos tokens (cores, tipografia, cantos, espaçamento).
 - `public/brand/forja-logo.png`: logo oficial (branco e vermelho, para fundo escuro). O vermelho da marca é `#D21312`. As três fagulhas da logo estão redesenhadas em SVG em `src/components/brand/Shards.tsx`.
 
 <!-- BEGIN:nextjs-agent-rules -->

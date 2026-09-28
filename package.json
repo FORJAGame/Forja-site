@@ -17,8 +17,7 @@
     "typecheck": "tsc --noEmit",
     "db:up": "docker compose up -d --wait postgres storage && docker compose run --rm storage-buckets",
     "db:down": "docker compose down",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
-    "tokens": "tsx scripts/generate-tokens.ts"
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",
@@ -53,11 +52,9 @@
     "jsdom": "30.1.1",
     "prettier": "^3.4.2",
     "tailwindcss": "4.3.3",
-    "tsx": "4.22.4",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "6.0.5",
-    "vitest": "4.0.18",
-    "yaml": "2.9.1"
+    "vitest": "4.0.18"
   },
   "engines": {
     "node": ">=24",

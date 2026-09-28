@@ -1,4 +1,9 @@
-/* Generated from DESIGN.md by `pnpm tokens`. Do not edit by hand. */
+/*
+ * Design tokens: the only place where the values described in DESIGN.md live.
+ * The default Tailwind palette is off, so only these colors exist.
+ * Saira Condensed and Geist Mono are always uppercase (DESIGN.md › Typography).
+ * The font variables come from next/font in src/app/(frontend)/fonts.ts.
+ */
 
 @theme static {
   --color-*: initial;

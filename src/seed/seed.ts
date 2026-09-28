@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs'
 
 import type { Payload } from 'payload'
 
-import { readDesignTokens } from '@/design-system/tokens'
 import { slugify } from '@/utilities/slugify'
 
 import { LOCAL_SEED_ADMIN, type SeedAdmin } from './admin'
@@ -18,9 +17,19 @@ const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds', 'me
 const COVER = { width: 1600, height: 900 }
 const GALLERY_SIZE = 3
 
+const readColorToken = (css: string, name: string): string => {
+  const match = css.match(new RegExp(`--color-${name}:\\s*([^;]+);`))
+  if (!match) throw new Error(`src/styles/tokens.css has no --color-${name}`)
+  return match[1].trim()
+}
+
 const brandPalette = (): PlaceholderPalette => {
-  const { colors } = readDesignTokens(readFileSync('DESIGN.md', 'utf8'))
-  return { background: colors['surface-raised'], stripe: colors.ember, shard: colors.primary }
+  const css = readFileSync('src/styles/tokens.css', 'utf8')
+  return {
+    background: readColorToken(css, 'surface-raised'),
+    stripe: readColorToken(css, 'ember'),
+    shard: readColorToken(css, 'primary'),
+  }
 }
 
 export const seed = async (payload: Payload, admin: SeedAdmin = LOCAL_SEED_ADMIN): Promise<void> => {

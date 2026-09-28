@@ -1,223 +1,10 @@
----
-version: alpha
-name: Forja — Arena
-description: Sistema visual do site da Forja, iniciativa de desenvolvimento de jogos do CESAR. Escuro, preto/vermelho/branco, títulos condensados em caixa-alta, cantos retos.
-colors:
-  primary: "#D21312"
-  primary-hover: "#E8201F"
-  primary-text: "#FF5A4F"
-  primary-tint: "#290E0F"
-  ember: "#3A0C0C"
-  neutral: "#060607"
-  surface: "#0D0D0F"
-  surface-raised: "#16161A"
-  on-surface: "#FFFFFF"
-  on-surface-variant: "#A1A1A6"
-  on-surface-muted: "#86868C"
-  outline: "#FFFFFF17"
-  outline-strong: "#FFFFFF2E"
-  divider: "#FFFFFF0F"
-  on-primary: "#FFFFFF"
-typography:
-  display-xl:
-    fontFamily: Saira Condensed
-    fontSize: 148px
-    fontWeight: 800
-    lineHeight: 0.88
-    letterSpacing: -0.01em
-  display-mobile:
-    fontFamily: Saira Condensed
-    fontSize: 60px
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: -0.005em
-  headline-lg:
-    fontFamily: Saira Condensed
-    fontSize: 72px
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: -0.005em
-  headline-lg-mobile:
-    fontFamily: Saira Condensed
-    fontSize: 48px
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: -0.005em
-  headline-md:
-    fontFamily: Saira Condensed
-    fontSize: 32px
-    fontWeight: 800
-    lineHeight: 1
-  headline-sm:
-    fontFamily: Saira Condensed
-    fontSize: 26px
-    fontWeight: 800
-    lineHeight: 1
-  title-list:
-    fontFamily: Saira Condensed
-    fontSize: 30px
-    fontWeight: 700
-    lineHeight: 1.05
-  stat:
-    fontFamily: Saira Condensed
-    fontSize: 104px
-    fontWeight: 800
-    lineHeight: 0.9
-  stat-mobile:
-    fontFamily: Saira Condensed
-    fontSize: 56px
-    fontWeight: 800
-    lineHeight: 0.9
-  body-lg:
-    fontFamily: Inter
-    fontSize: 20px
-    fontWeight: 400
-    lineHeight: 1.55
-  body-md:
-    fontFamily: Inter
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.55
-  body-sm:
-    fontFamily: Inter
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.5
-  button:
-    fontFamily: Saira Condensed
-    fontSize: 19px
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: 0.04em
-  nav-link:
-    fontFamily: Saira Condensed
-    fontSize: 18px
-    fontWeight: 600
-    lineHeight: 1
-    letterSpacing: 0.04em
-  label-mono:
-    fontFamily: Geist Mono
-    fontSize: 12px
-    fontWeight: 400
-    lineHeight: 1.2
-    letterSpacing: 0.1em
-  label-mono-sm:
-    fontFamily: Geist Mono
-    fontSize: 11px
-    fontWeight: 500
-    lineHeight: 1.2
-    letterSpacing: 0.06em
-rounded:
-  none: 0px
-  xs: 2px
-  full: 9999px
-spacing:
-  unit: 8px
-  xs: 4px
-  sm: 8px
-  md: 16px
-  lg: 24px
-  xl: 32px
-  2xl: 56px
-  3xl: 72px
-  section: 120px
-  section-mobile: 72px
-  gutter: 24px
-  margin: 120px
-  margin-mobile: 24px
-  content-max: 1200px
-  measure: 680px
-components:
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.button}"
-    rounded: "{rounded.xs}"
-    padding: 12px 26px
-  button-primary-hover:
-    backgroundColor: "{colors.primary-hover}"
-  button-secondary:
-    backgroundColor: transparent
-    textColor: "{colors.on-surface}"
-    typography: "{typography.button}"
-    rounded: "{rounded.xs}"
-    padding: 12px 26px
-    borderColor: "{colors.outline-strong}"
-  button-on-primary:
-    backgroundColor: "{colors.neutral}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.button}"
-    rounded: "{rounded.xs}"
-    padding: 14px 28px
-  eyebrow:
-    textColor: "{colors.primary-text}"
-    typography: "{typography.label-mono}"
-  nav:
-    backgroundColor: "{colors.neutral}"
-    textColor: "{colors.on-surface-variant}"
-    typography: "{typography.nav-link}"
-    height: 76px
-    borderColor: "{colors.outline}"
-  card:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.none}"
-    padding: 24px
-    borderColor: "{colors.outline}"
-  card-hover:
-    borderColor: "{colors.primary}"
-  card-accent-bar:
-    backgroundColor: "{colors.primary}"
-    width: 56px
-    height: 4px
-  card-cover:
-    backgroundColor: "{colors.ember}"
-  avatar-guild:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.label-mono}"
-    rounded: "{rounded.none}"
-    size: 56px
-  badge-status-dev:
-    backgroundColor: "{colors.primary-tint}"
-    textColor: "{colors.primary-text}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
-  badge-status-released:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
-  badge-status-paused:
-    backgroundColor: transparent
-    textColor: "{colors.on-surface-muted}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
-    borderColor: "{colors.outline-strong}"
-  chip:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.on-surface-variant}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 3px 8px
-  article-row:
-    typography: "{typography.title-list}"
-    padding: 32px 0px
-    borderColor: "{colors.outline}"
-  cta-block:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    padding: 80px 72px
-    rounded: "{rounded.none}"
----
-
 # Forja — Design System
 
 Protótipo de referência (Figma): https://www.figma.com/design/qLr3pgjNo0az2ZJVdMaBaQ/Forja
 - Página `01 · Direções`: as três direções exploradas (A Bigorna, B Oficina, **C Arena — escolhida**).
 - Página `02 · Landing`: landing desktop (1440) e mobile (390).
+
+**Tokens:** os valores (cores, tipografia, cantos, espaçamento) ficam só em `src/styles/tokens.css`, que é o `@theme` do Tailwind. Este documento usa os nomes dos tokens e explica quando usar cada um. Para mudar um valor, edite o CSS. Para criar ou remover um token, edite os dois arquivos. Os hexadecimais citados em `## Colors` justificam o contraste; se uma cor mudar, atualize também o texto.
 
 ## Overview
 
@@ -250,14 +37,14 @@ A paleta é preto, vermelho e branco, e nada mais. Tons neutros fazem a hierarqu
 
 São três famílias, cada uma com um papel fixo:
 
-- **Saira Condensed (700–800), sempre em CAIXA-ALTA:** a voz da marca. Aparece em títulos, nomes de guilda e de jogo, números grandes, botões e menu. É condensada e pesada como o letreiro da logo. O `letterSpacing` fica levemente negativo nos tamanhos grandes e positivo (+4%) em botões e menu.
+- **Saira Condensed (700–800), sempre em CAIXA-ALTA:** a voz da marca. Aparece em títulos, nomes de guilda e de jogo, números grandes, botões e menu. É condensada e pesada como o letreiro da logo. O espaçamento entre letras fica levemente negativo nos tamanhos grandes e positivo (+4%) em botões e menu.
 - **Inter (400–500):** todo texto corrido (descrições, sinopses, autores). Nunca em caixa-alta.
 - **Geist Mono (400–500), em CAIXA-ALTA com espaçamento aberto:** metadados e rótulos "técnicos", como a numeração de seção (`01 / O QUE É A FORJA`), contagens (`3 JOGOS · 12 MEMBROS`), status, veículo do artigo e rodapé.
 
 Regras:
 - **Destaque do hero:** uma única palavra (ou expressão) fica em `primary`. Na landing é "FORJADOS."
 - **Tamanho no mobile:** o `display` cai de 148px para 60px e os títulos de seção de 72px para 48px, sempre mantendo a quebra de linha intencional.
-- A caixa-alta não é um token. Aplique com `text-transform: uppercase` nas classes de Saira Condensed e Geist Mono.
+- As classes `type-<token>` de Saira Condensed e Geist Mono já aplicam `text-transform: uppercase`.
 
 ## Layout
 
@@ -286,6 +73,26 @@ A forma é **reta e angular**, como os cortes da logo.
 - **Diagonais a ~28°:** faixas decorativas e fagulhas. Nunca use curvas decorativas.
 
 ## Components
+
+Medidas e tokens de cada componente:
+
+| Componente | Fundo | Texto | Tipografia | Canto | Medidas |
+|---|---|---|---|---|---|
+| `button-primary` | `primary` (hover: `primary-hover`) | `on-primary` | `button` | `xs` | padding 12px 26px |
+| `button-secondary` | transparente, borda `outline-strong` | `on-surface` | `button` | `xs` | padding 12px 26px |
+| `button-on-primary` | `neutral` | `on-surface` | `button` | `xs` | padding 14px 28px |
+| `eyebrow` (rótulo de seção) | — | `primary-text` | `label-mono` | — | — |
+| `nav` | `neutral`, borda inferior `outline` | `on-surface-variant` | `nav-link` | — | altura 76px |
+| `card` | `surface`, borda `outline` (hover: `primary`) | — | — | `none` | padding 24px |
+| `card-accent-bar` | `primary` | — | — | — | 56×4px |
+| `card-cover` | `ember` | — | — | — | — |
+| `avatar-guild` | `surface-raised` | `on-surface` | `label-mono` | `none` | 56×56px |
+| `badge-status-dev` | `primary-tint` | `primary-text` | `label-mono-sm` | `none` | padding 4px 8px |
+| `badge-status-released` | `surface-raised` | `on-surface` | `label-mono-sm` | `none` | padding 4px 8px |
+| `badge-status-paused` | transparente, borda `outline-strong` | `on-surface-muted` | `label-mono-sm` | `none` | padding 4px 8px |
+| `chip` | `surface-raised` | `on-surface-variant` | `label-mono-sm` | `none` | padding 3px 8px |
+| `article-row` | borda `outline` | — | `title-list` | — | padding 32px 0 |
+| `cta-block` | `primary` | `on-primary` | — | `none` | padding 80px 72px |
 
 - **Botões:** o `button-primary` (vermelho) é a ação principal, no máximo um por tela ou bloco ("Entre para uma guilda", "Participe"). O `button-secondary` tem só contorno e é a ação secundária ("Ver jogos →"). O `button-on-primary` (preto) é usado só sobre o bloco vermelho. No mobile os botões ocupam a largura toda e ficam empilhados.
 - **Menu:** barra de ponta a ponta com 76px de altura e uma linha fina embaixo. Logo à esquerda, links no centro (Guildas, Jogos, Artigos, Sobre) e "Participe" à direita. No mobile vira logo + ícone de menu (hambúrguer).
