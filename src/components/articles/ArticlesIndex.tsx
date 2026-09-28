@@ -1,6 +1,6 @@
-import { EmptyState } from '@/components/landing/EmptyState'
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup'
 import { Container } from '@/components/ui/Container'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { landingCopy } from '@/content/landing'
 import type { ArticleRowView } from '@/lib/presenters'

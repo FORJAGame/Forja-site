@@ -1,10 +1,9 @@
+import { GuildGrid } from '@/components/guilds/GuildGrid'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { landingCopy } from '@/content/landing'
 import type { GuildCardView } from '@/lib/presenters'
-
-import { EmptyState } from './EmptyState'
-import { GuildGrid } from '@/components/guilds/GuildGrid'
 
 const GUILDS_ON_MOBILE = 4
 

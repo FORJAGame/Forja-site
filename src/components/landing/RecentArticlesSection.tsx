@@ -1,11 +1,10 @@
+import { ArticleRow } from '@/components/articles/ArticleRow'
 import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { landingCopy } from '@/content/landing'
 import type { ArticleRowView } from '@/lib/presenters'
-
-import { ArticleRow } from '@/components/articles/ArticleRow'
-import { EmptyState } from './EmptyState'
 
 export function RecentArticlesSection({ articles }: { articles: ArticleRowView[] }) {
   const copy = landingCopy.articles

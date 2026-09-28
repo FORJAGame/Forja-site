@@ -1,10 +1,9 @@
+import { GameGrid } from '@/components/games/GameGrid'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { landingCopy } from '@/content/landing'
 import type { GameCardView } from '@/lib/presenters'
-
-import { EmptyState } from './EmptyState'
-import { GameGrid } from '@/components/games/GameGrid'
 
 export function FeaturedGamesSection({ games }: { games: GameCardView[] }) {
   const copy = landingCopy.games
