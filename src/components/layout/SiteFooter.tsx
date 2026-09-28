@@ -10,19 +10,16 @@ function FooterColumn({ title, links }: { title: string; links: NavItem[] }) {
     <div className="flex flex-col gap-md">
       <p className="type-label-mono-sm text-on-surface-muted">{title}</p>
       <ul className="flex flex-col gap-sm">
-        {links.map((link) => (
-          <li key={link.href}>
-            {isExternalHref(link.href) ? (
-              <a href={link.href} className="type-body-sm text-on-surface-variant hover:text-on-surface">
+        {links.map((link) => {
+          const Anchor = isExternalHref(link.href) ? 'a' : Link
+          return (
+            <li key={link.href}>
+              <Anchor href={link.href} className="type-body-sm text-on-surface-variant hover:text-on-surface">
                 {link.label}
-              </a>
-            ) : (
-              <Link href={link.href} className="type-body-sm text-on-surface-variant hover:text-on-surface">
-                {link.label}
-              </Link>
-            )}
-          </li>
-        ))}
+              </Anchor>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

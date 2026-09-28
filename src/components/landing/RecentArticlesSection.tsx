@@ -1,11 +1,9 @@
-import { RevealGroup, RevealItem } from '@/components/motion/RevealGroup'
+import { ArticleList } from '@/components/articles/ArticleList'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { landingCopy } from '@/content/landing'
 import type { ArticleRowView } from '@/lib/presenters'
-
-import { ArticleRow } from '@/components/articles/ArticleRow'
-import { EmptyState } from './EmptyState'
 
 export function RecentArticlesSection({ articles }: { articles: ArticleRowView[] }) {
   const copy = landingCopy.articles
@@ -19,17 +17,7 @@ export function RecentArticlesSection({ articles }: { articles: ArticleRowView[]
         title={copy.title}
         link={{ href: '/artigos', label: copy.link }}
       />
-      {articles.length === 0 ? (
-        <EmptyState>{copy.empty}</EmptyState>
-      ) : (
-        <RevealGroup as="ul" className="border-t border-outline">
-          {articles.map((article) => (
-            <RevealItem as="li" key={article.id}>
-              <ArticleRow article={article} />
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      )}
+      {articles.length === 0 ? <EmptyState>{copy.empty}</EmptyState> : <ArticleList articles={articles} />}
     </Section>
   )
 }

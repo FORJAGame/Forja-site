@@ -1,4 +1,5 @@
 import { Arrow } from '@/components/ui/Arrow'
+import { NewTabNote } from '@/components/ui/NewTabNote'
 import { landingCopy } from '@/content/landing'
 import type { ArticleRowView } from '@/lib/presenters'
 
@@ -19,7 +20,7 @@ export function ArticleRow({ article, headingLevel: Heading = 'h3' }: ArticleRow
               rel="noopener noreferrer"
               className="after:absolute after:inset-0"
             >
-              {article.title} <span className="sr-only">(abre em nova aba)</span>
+              {article.title} <NewTabNote />
             </a>
           ) : (
             article.title
@@ -33,7 +34,7 @@ export function ArticleRow({ article, headingLevel: Heading = 'h3' }: ArticleRow
           className="type-button inline-flex items-center gap-sm md:shrink-0"
         >
           {landingCopy.articles.readLabel}
-          <Arrow external />
+          <Arrow direction="external" />
         </span>
       )}
     </article>

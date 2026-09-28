@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { isPreviewCollection, previewAdminOptions, previewUrlFor, publicPathFor } from '@/lib/preview'
+import { publicPathFor } from '@/lib/paths'
+import { isPreviewCollection, previewAdminOptions, previewUrlFor } from '@/lib/preview'
 
 describe('preview URLs', () => {
   it('maps each collection to its public page', () => {

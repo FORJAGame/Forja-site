@@ -5,6 +5,7 @@ import { cx } from '@/utilities/cx'
 import { isExternalHref } from '@/utilities/url'
 
 import { Arrow } from './Arrow'
+import { NewTabNote } from './NewTabNote'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'onPrimary'
 export type ButtonSize = 'md' | 'sm'
@@ -51,7 +52,13 @@ export function ButtonLink({
   const content = (
     <>
       {children}
-      {arrow && <Arrow external={newTab} />}
+      {newTab && (
+        <>
+          {' '}
+          <NewTabNote />
+        </>
+      )}
+      {arrow && <Arrow direction={newTab ? 'external' : 'forward'} />}
     </>
   )
 

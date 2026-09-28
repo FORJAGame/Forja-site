@@ -3,6 +3,7 @@ import { formatMonthYear } from '@/utilities/date'
 import { pluralize } from '@/utilities/pluralize'
 import { getYouTubeVideoId } from '@/utilities/url'
 
+import { publicPathFor } from './paths'
 import type { DevelopmentStatus, ExternalLinkView, MediaView, RichTextData } from './views'
 
 export type GuildCardView = {
@@ -60,7 +61,7 @@ export const toGuildCard = (guild: Guild, gameCount: number): GuildCardView => {
   return {
     id: guild.id,
     name: guild.name,
-    href: `/guildas/${guild.slug}`,
+    href: publicPathFor('guilds', guild.slug),
     focus: guild.shortDescription,
     initials: Array.from(guild.name).slice(0, 2).join(''),
     logo: toMediaView(guild.logo),
@@ -71,7 +72,7 @@ export const toGuildCard = (guild: Guild, gameCount: number): GuildCardView => {
 export const toGameCard = (game: Game): GameCardView => ({
   id: game.id,
   title: game.title,
-  href: `/jogos/${game.slug}`,
+  href: publicPathFor('games', game.slug),
   synopsis: game.synopsis,
   status: game.developmentStatus,
   guildName: typeof game.guild === 'object' ? game.guild.name : null,
@@ -147,7 +148,10 @@ export type GamePageView = GameCardView & {
 export const toGamePage = (game: Game): GamePageView => ({
   ...toGameCard(game),
   slug: game.slug,
-  guild: typeof game.guild === 'object' ? { name: game.guild.name, href: `/guildas/${game.guild.slug}` } : null,
+  guild:
+    typeof game.guild === 'object'
+      ? { name: game.guild.name, href: publicPathFor('guilds', game.guild.slug) }
+      : null,
   trailerVideoId: game.trailerUrl ? getYouTubeVideoId(game.trailerUrl) : null,
   description: toRichText(game.description),
   gallery: (game.gallery ?? []).map(toMediaView).filter((image): image is MediaView => image !== null),

@@ -9,7 +9,6 @@ import { Container } from '@/components/ui/Container'
 import { Cover } from '@/components/ui/Cover'
 import { Gallery } from '@/components/ui/Gallery'
 import { Section } from '@/components/ui/Section'
-import { SectionTitle } from '@/components/ui/SectionTitle'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { YouTubeEmbed } from '@/components/ui/YouTubeEmbed'
 import type { GamePageView } from '@/lib/presenters'
@@ -37,8 +36,7 @@ export function GameDetail({ game }: { game: GamePageView }) {
           <div className="flex flex-col gap-md md:flex-row md:items-center">
             {game.playUrl && (
               <ButtonLink href={game.playUrl} newTab arrow className="max-md:w-full">
-                Jogar{' '}
-                <span className="sr-only">(abre em nova aba)</span>
+                Jogar
               </ButtonLink>
             )}
             {game.platforms.length > 0 && <ChipList label="Plataformas" items={game.platforms} />}
@@ -49,29 +47,25 @@ export function GameDetail({ game }: { game: GamePageView }) {
       </Container>
 
       {game.trailerVideoId && (
-        <Section id="trailer" labelledBy="trailer-title">
-          <SectionTitle id="trailer-title">Trailer</SectionTitle>
+        <Section id="trailer" labelledBy="trailer-title" title="Trailer">
           <YouTubeEmbed videoId={game.trailerVideoId} title={`Trailer de ${game.title}`} />
         </Section>
       )}
 
       {game.description && (
-        <Section id="sobre" labelledBy="sobre-title">
-          <SectionTitle id="sobre-title">Sobre o jogo</SectionTitle>
+        <Section id="sobre" labelledBy="sobre-title" title="Sobre o jogo">
           <RichTextContent data={game.description} />
         </Section>
       )}
 
       {game.gallery.length > 0 && (
-        <Section id="galeria" labelledBy="galeria-title">
-          <SectionTitle id="galeria-title">Galeria</SectionTitle>
+        <Section id="galeria" labelledBy="galeria-title" title="Galeria">
           <Gallery images={game.gallery} />
         </Section>
       )}
 
       {game.credits && (
-        <Section id="creditos" labelledBy="creditos-title">
-          <SectionTitle id="creditos-title">Créditos</SectionTitle>
+        <Section id="creditos" labelledBy="creditos-title" title="Créditos">
           <p className="type-body-md max-w-measure whitespace-pre-line text-on-surface-variant">{game.credits}</p>
         </Section>
       )}

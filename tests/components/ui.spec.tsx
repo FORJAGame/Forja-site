@@ -35,7 +35,7 @@ describe('ButtonLink', () => {
         Jogar
       </ButtonLink>,
     )
-    const link = screen.getByRole('link', { name: 'Jogar' })
+    const link = screen.getByRole('link', { name: 'Jogar (abre em nova aba)' })
     expect(link).toHaveAttribute('target', '_blank')
     expect(screen.getByText('↗')).toHaveAttribute('aria-hidden', 'true')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')

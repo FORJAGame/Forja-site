@@ -12,7 +12,8 @@ import { renderPlaceholderPng, type PlaceholderPalette } from './placeholderImag
 // Payload's storage adapter writes flags into it, and a shared one makes later uploads skip storage.
 const trustedScript = () => ({ overrideAccess: true, context: { disableRevalidate: true } }) as const
 
-const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds', 'media'] as const
+// Relationships point from games, articles and users to guilds and media, so those go last.
+export const COLLECTIONS_IN_DELETE_ORDER = ['games', 'articles', 'users', 'guilds', 'media'] as const
 
 const COVER = { width: 1600, height: 900 }
 const GALLERY_SIZE = 3

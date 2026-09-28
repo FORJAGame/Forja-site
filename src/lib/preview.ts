@@ -1,8 +1,6 @@
 import type { GeneratePreviewURL, LivePreviewConfig } from 'payload'
 
-export type PreviewCollection = 'guilds' | 'games'
-
-const PUBLIC_PATH_PREFIX: Record<PreviewCollection, string> = { guilds: '/guildas', games: '/jogos' }
+import type { PageCollection } from './paths'
 
 // DESIGN.md › Layout: the same widths the landing was designed and verified at.
 const PREVIEW_BREAKPOINTS: NonNullable<LivePreviewConfig['breakpoints']> = [
@@ -10,16 +8,13 @@ const PREVIEW_BREAKPOINTS: NonNullable<LivePreviewConfig['breakpoints']> = [
   { name: 'desktop', label: 'Desktop', width: 1440, height: 900 },
 ]
 
-export const isPreviewCollection = (value: string | null): value is PreviewCollection =>
+export const isPreviewCollection = (value: string | null): value is PageCollection =>
   value === 'guilds' || value === 'games'
 
-export const publicPathFor = (collection: PreviewCollection, slug: string): string =>
-  `${PUBLIC_PATH_PREFIX[collection]}/${slug}`
-
-export const previewUrlFor = (collection: PreviewCollection, id: unknown): string | null =>
+export const previewUrlFor = (collection: PageCollection, id: unknown): string | null =>
   id ? `/preview?${new URLSearchParams({ collection, id: String(id) })}` : null
 
-export const previewAdminOptions = (collection: PreviewCollection) => {
+export const previewAdminOptions = (collection: PageCollection) => {
   const livePreview: LivePreviewConfig = {
     url: ({ data }) => previewUrlFor(collection, data?.id),
     breakpoints: PREVIEW_BREAKPOINTS,

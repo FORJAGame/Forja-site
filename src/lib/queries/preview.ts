@@ -1,6 +1,7 @@
 import type { Payload, TypedUser } from 'payload'
 
-import { isPreviewCollection, publicPathFor } from '@/lib/preview'
+import { publicPathFor } from '@/lib/paths'
+import { isPreviewCollection } from '@/lib/preview'
 
 export type PreviewTarget = { path: string } | { status: 400 | 401 | 404; message: string }
 

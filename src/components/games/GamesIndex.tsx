@@ -1,5 +1,5 @@
-import { EmptyState } from '@/components/landing/EmptyState'
 import { Container } from '@/components/ui/Container'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { landingCopy } from '@/content/landing'
 import type { GameCardView } from '@/lib/presenters'
