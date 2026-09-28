@@ -1,20 +1,10 @@
 import type { Payload } from 'payload'
 
 import { type GuildCardView, type GuildPageView, toGameCard, toGuildCard, toGuildPage } from '@/lib/presenters'
-import { PUBLIC_VIEWER, queryOptionsFor, type Viewer } from '@/lib/viewer'
+import { PUBLIC_VIEWER, type Viewer } from '@/lib/viewer'
 
+import { findPageBySlug, listPublishedSlugs } from './bySlug'
 import { countPublishedGamesByGuild } from './counts'
-
-const findGuildBySlug = async (payload: Payload, slug: string, viewer: Viewer) => {
-  const { docs } = await payload.find({
-    collection: 'guilds',
-    ...queryOptionsFor(viewer),
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 1,
-  })
-  return docs[0] ?? null
-}
 
 export const listGuilds = async (payload: Payload): Promise<GuildCardView[]> => {
   const [guilds, gamesByGuild] = await Promise.all([
@@ -29,9 +19,7 @@ export const getGuildPage = async (
   slug: string,
   viewer: Viewer = PUBLIC_VIEWER,
 ): Promise<GuildPageView | null> => {
-  const guild =
-    (await findGuildBySlug(payload, slug, viewer)) ??
-    (viewer.draft ? await findGuildBySlug(payload, slug, PUBLIC_VIEWER) : null)
+  const guild = await findPageBySlug(payload, 'guilds', slug, viewer)
   if (!guild) return null
 
   const games = await payload.find({
@@ -45,13 +33,4 @@ export const getGuildPage = async (
   return toGuildPage(guild, games.docs.map(toGameCard))
 }
 
-export const listGuildSlugs = async (payload: Payload): Promise<string[]> => {
-  const { docs } = await payload.find({
-    collection: 'guilds',
-    overrideAccess: false,
-    pagination: false,
-    depth: 0,
-    select: { slug: true },
-  })
-  return docs.map((guild) => guild.slug)
-}
+export const listGuildSlugs = (payload: Payload): Promise<string[]> => listPublishedSlugs(payload, 'guilds')
