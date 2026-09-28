@@ -2,8 +2,9 @@ services:
   postgres:
     image: postgres:17-alpine
     restart: unless-stopped
+    # Bound to this machine only: the dev credentials are public.
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
