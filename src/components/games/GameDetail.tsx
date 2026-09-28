@@ -37,8 +37,7 @@ export function GameDetail({ game }: { game: GamePageView }) {
           <div className="flex flex-col gap-md md:flex-row md:items-center">
             {game.playUrl && (
               <ButtonLink href={game.playUrl} newTab arrow className="max-md:w-full">
-                Jogar{' '}
-                <span className="sr-only">(abre em nova aba)</span>
+                Jogar
               </ButtonLink>
             )}
             {game.platforms.length > 0 && <ChipList label="Plataformas" items={game.platforms} />}

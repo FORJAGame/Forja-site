@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { cx } from '@/utilities/cx'
 
 import { Arrow } from './Arrow'
+import { NewTabNote } from './NewTabNote'
 
 type ArrowLinkProps = { href: string; external?: boolean; className?: string; children: ReactNode }
 
@@ -12,8 +13,8 @@ export function ArrowLink({ href, external = false, className, children }: Arrow
 
   return external ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
-      {children} <span className="sr-only">(abre em nova aba)</span>
-      <Arrow external />
+      {children} <NewTabNote />
+      <Arrow direction="external" />
     </a>
   ) : (
     <Link href={href} className={classes}>
