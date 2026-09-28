@@ -1,17 +1,10 @@
+import { isLocalDatabase } from '@/config/env'
+
 export type SeedAdmin = { name: string; email: string; password: string }
 
 export const LOCAL_SEED_ADMIN: SeedAdmin = { name: 'Admin Forja', email: 'admin@forja.local', password: 'forja-dev' }
 
-const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]'])
 const MIN_PASSWORD_LENGTH = 12
-
-export const isLocalDatabase = (databaseUrl: string): boolean => {
-  try {
-    return LOCAL_HOSTS.has(new URL(databaseUrl).hostname)
-  } catch {
-    return false
-  }
-}
 
 // The local login is published in the repository, so it must never reach a database others can open.
 export const resolveSeedAdmin = (env: Record<string, string | undefined>): SeedAdmin => {

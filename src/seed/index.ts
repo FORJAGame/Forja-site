@@ -3,7 +3,9 @@ import { getPayload } from 'payload'
 
 import { LOCAL_SEED_ADMIN, resolveSeedAdmin } from './admin'
 import { seed } from './seed'
+import { confirmSeedTarget } from './target'
 
+confirmSeedTarget(process.env)
 const admin = resolveSeedAdmin(process.env)
 const payload = await getPayload({ config })
 await seed(payload, admin)

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { EXAMPLE_PAYLOAD_SECRET, readServerEnv } from '@/config/env'
+import { EXAMPLE_PAYLOAD_SECRET, isLocalDatabase, readServerEnv } from '@/config/env'
 
 const completeEnv = {
   DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:5432/forja',
@@ -12,10 +12,13 @@ const completeEnv = {
   S3_SECRET_ACCESS_KEY: 'forja-dev-secret',
 }
 
+const remoteDatabaseUrl = 'postgresql://user:pass@ep-quiet-sky-123.sa-east-1.aws.neon.tech/forja?sslmode=require'
+
 describe('readServerEnv', () => {
   it('reads the database, secret and storage settings', () => {
     expect(readServerEnv(completeEnv)).toEqual({
       databaseUrl: completeEnv.DATABASE_URL,
+      pushDevSchema: true,
       payloadSecret: completeEnv.PAYLOAD_SECRET,
       storage: {
         endpoint: 'http://127.0.0.1:8333',
@@ -42,5 +45,24 @@ describe('readServerEnv', () => {
 
   it('trims surrounding whitespace pasted into dashboards', () => {
     expect(readServerEnv({ ...completeEnv, S3_BUCKET: ' forja-media-dev \n' }).storage.bucket).toBe('forja-media-dev')
+  })
+})
+
+describe('isLocalDatabase', () => {
+  it('recognizes the docker-compose database', () => {
+    expect(isLocalDatabase('postgresql://postgres:postgres@127.0.0.1:5432/forja')).toBe(true)
+    expect(isLocalDatabase('postgresql://postgres:postgres@localhost:5432/forja')).toBe(true)
+  })
+
+  it('treats anything else, or an invalid URL, as remote', () => {
+    expect(isLocalDatabase(remoteDatabaseUrl)).toBe(false)
+    expect(isLocalDatabase('not a url')).toBe(false)
+  })
+})
+
+describe('pushDevSchema', () => {
+  it('lets Payload push the schema only to a local database', () => {
+    expect(readServerEnv(completeEnv).pushDevSchema).toBe(true)
+    expect(readServerEnv({ ...completeEnv, DATABASE_URL: remoteDatabaseUrl }).pushDevSchema).toBe(false)
   })
 })

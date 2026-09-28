@@ -1,21 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { LOCAL_SEED_ADMIN, isLocalDatabase, resolveSeedAdmin } from '@/seed/admin'
+import { LOCAL_SEED_ADMIN, resolveSeedAdmin } from '@/seed/admin'
 
 const localDb = 'postgresql://postgres:postgres@127.0.0.1:5432/forja'
 const remoteDb = 'postgresql://user:pass@ep-quiet-sky-123.sa-east-1.aws.neon.tech/forja?sslmode=require'
-
-describe('isLocalDatabase', () => {
-  it('recognizes the docker-compose database', () => {
-    expect(isLocalDatabase(localDb)).toBe(true)
-    expect(isLocalDatabase('postgresql://postgres:postgres@localhost:5432/forja')).toBe(true)
-  })
-
-  it('treats anything else, or an invalid URL, as remote', () => {
-    expect(isLocalDatabase(remoteDb)).toBe(false)
-    expect(isLocalDatabase('not a url')).toBe(false)
-  })
-})
 
 describe('resolveSeedAdmin', () => {
   it('uses the public local login only against the local database', () => {

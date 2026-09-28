@@ -35,6 +35,7 @@ export default buildConfig({
   collections: [Users, Guilds, Games, Articles, Media],
   db: postgresAdapter({
     pool: { connectionString: env.databaseUrl },
+    push: env.pushDevSchema,
   }),
   editor: lexicalEditor(),
   graphQL: { disable: true },

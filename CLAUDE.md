@@ -134,7 +134,7 @@ pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/p
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
 pnpm tokens                 # regenera src/styles/tokens.css a partir do DESIGN.md (o teste falha se esquecer)
-pnpm seed                   # APAGA e recria o conteúdo de exemplo, com imagens (admin@forja.local / forja-dev só em banco local)
+pnpm seed                   # APAGA e recria o conteúdo de exemplo, com imagens (admin@forja.local / forja-dev só em banco local; banco remoto exige SEED_CONFIRM_REMOTE_WIPE=yes)
 ```
 
 Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand -hex 32`). O pnpm 12 lê a liberação de build scripts do `pnpm-workspace.yaml` (`allowBuilds`), não do `package.json`.
@@ -147,6 +147,7 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 - **Slug:** `src/fields/slug.ts` usa o `slugField` do Payload. O slug acompanha o título durante o autosave até a primeira publicação ou até alguém editá-lo à mão; depois fica fixo, para não quebrar links.
 - **Rascunho abandonado:** com autosave, abrir "Criar novo" já cria um rascunho vazio. Rascunhos sem título ficam fora da fila de aprovação, e o editor pode excluir jogos da própria guilda que nunca foram publicados (`adminOrOwnGuildUnpublished`).
 - **Variáveis de ambiente:** `src/config/env.ts` (`readServerEnv`) valida tudo o que o servidor precisa e falha com os nomes do que falta. Nova variável obrigatória entra lá, no `.env.example` e na tabela do `README.md`.
+- **Push de schema só em banco local:** o Payload sincroniza o schema sozinho (`push`) apenas quando o `DATABASE_URL` aponta para `localhost`/`127.0.0.1` (`pushDevSchema`). Em qualquer outro banco, o schema muda só por migração: um push marca o banco e faz o `payload migrate` do deploy travar numa pergunta.
 - **Imagens:** `src/collections/Media.ts` (limite de 4 MB, por causa do limite de 4,5 MB da Vercel) e o `s3Storage` em `src/payload.config.ts`. Os testes usam o bucket `forja-media-test`. Em scripts, passe um `context` novo a cada chamada da Local API: o adaptador grava marcadores nele, e um objeto compartilhado faz os uploads seguintes pularem o bucket (ver `src/seed/seed.ts`).
 - **Sempre existe um admin:** `src/hooks/keepOneAdmin.ts` impede rebaixar ou excluir o último admin.
 - **Editor sempre na própria guilda:** `src/hooks/assignOwnGuild.ts` (jogos) e o acesso `adminOrOwnGuild`.

@@ -8,6 +8,7 @@ export type StorageEnv = {
 
 export type ServerEnv = {
   databaseUrl: string
+  pushDevSchema: boolean
   payloadSecret: string
   storage: StorageEnv
 }
@@ -26,6 +27,16 @@ const REQUIRED_VARIABLES = [
 
 type RequiredVariable = (typeof REQUIRED_VARIABLES)[number]
 
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]'])
+
+export const isLocalDatabase = (databaseUrl: string): boolean => {
+  try {
+    return LOCAL_HOSTS.has(new URL(databaseUrl).hostname)
+  } catch {
+    return false
+  }
+}
+
 export const readServerEnv = (env: Record<string, string | undefined> = process.env): ServerEnv => {
   const read = (name: RequiredVariable) => env[name]?.trim() ?? ''
 
@@ -41,6 +52,8 @@ export const readServerEnv = (env: Record<string, string | undefined> = process.
 
   return {
     databaseUrl: read('DATABASE_URL'),
+    // A dev push marks the database as push-managed, and every later `payload migrate` (the deploy build) stops on a prompt.
+    pushDevSchema: isLocalDatabase(read('DATABASE_URL')),
     payloadSecret: read('PAYLOAD_SECRET'),
     storage: {
       endpoint: read('S3_ENDPOINT'),

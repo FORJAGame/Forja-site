@@ -37,5 +37,6 @@ O projeto na Vercel e as pipelines do GitHub Actions são configurados fora dest
 - **Imagens no R2:** o bucket fica **privado**. O site entrega as imagens por `/api/media/file/...`, então não é preciso domínio público nem CORS no R2.
 - **Uploads até 4 MB:** a Vercel recusa requisições maiores que 4,5 MB. O painel mostra erro para arquivos maiores.
 - **Primeiro admin:** num banco vazio, o primeiro usuário criado em `/admin` vira admin. Crie o seu logo depois do primeiro deploy, **antes** de divulgar o link.
-- **Conteúdo de exemplo no deploy (opcional):** rode o seed da sua máquina com as variáveis do deploy e um admin próprio. O seed se recusa a criar o admin padrão, cuja senha é pública, num banco remoto:
-  `DATABASE_URL=… S3_…=… SEED_ADMIN_EMAIL=voce@… SEED_ADMIN_PASSWORD=… pnpm seed`
+- **Conteúdo de exemplo no deploy (opcional, só num banco recém-criado):** o seed **APAGA todo o conteúdo, os usuários e as imagens** do banco de destino. Rode da sua máquina com as variáveis do deploy, um admin próprio (o seed se recusa a criar o admin padrão, cuja senha é pública) e a confirmação explícita:
+  `DATABASE_URL=… S3_…=… SEED_ADMIN_EMAIL=voce@… SEED_ADMIN_PASSWORD=… SEED_CONFIRM_REMOTE_WIPE=yes pnpm seed`
+- **Migrações travando numa pergunta ("run Payload in dev mode"):** o banco foi marcado por um *push* de schema. O app só faz push em banco local, mas se acontecer, apague a marca e rode o build de novo: `DELETE FROM payload_migrations WHERE batch = -1;`
