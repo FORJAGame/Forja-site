@@ -9,7 +9,6 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { GuildAvatar } from '@/components/ui/GuildAvatar'
 import { Section } from '@/components/ui/Section'
-import { SectionTitle } from '@/components/ui/SectionTitle'
 import type { GuildPageView } from '@/lib/presenters'
 
 export function GuildProfile({ guild }: { guild: GuildPageView }) {
@@ -43,14 +42,12 @@ export function GuildProfile({ guild }: { guild: GuildPageView }) {
       </Container>
 
       {guild.description && (
-        <Section id="sobre" labelledBy="sobre-title">
-          <SectionTitle id="sobre-title">Sobre</SectionTitle>
+        <Section id="sobre" labelledBy="sobre-title" title="Sobre">
           <RichTextContent data={guild.description} />
         </Section>
       )}
 
-      <Section id="jogos" labelledBy="jogos-title">
-        <SectionTitle id="jogos-title">Jogos</SectionTitle>
+      <Section id="jogos" labelledBy="jogos-title" title="Jogos">
         {guild.games.length === 0 ? (
           <EmptyState>Esta guilda ainda não publicou jogos.</EmptyState>
         ) : (
@@ -59,8 +56,7 @@ export function GuildProfile({ guild }: { guild: GuildPageView }) {
       </Section>
 
       {guild.members.length > 0 && (
-        <Section id="membros" labelledBy="membros-title">
-          <SectionTitle id="membros-title">Membros</SectionTitle>
+        <Section id="membros" labelledBy="membros-title" title="Membros">
           <ul aria-label="Membros" className="grid gap-sm sm:grid-cols-2 lg:grid-cols-4">
             {guild.members.map((member) => (
               <li key={member} className="type-body-md text-on-surface-variant">
