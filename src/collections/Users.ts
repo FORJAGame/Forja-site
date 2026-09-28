@@ -14,6 +14,8 @@ export const Users: CollectionConfig = {
     create: adminOnly,
     update: adminOrSelf,
     delete: adminOnly,
+    // Payload's default lets any logged-in user unlock accounts, weakening the lock after failed logins.
+    unlock: adminOnly,
   },
   hooks: {
     beforeValidate: [assignFirstUserAsAdmin],

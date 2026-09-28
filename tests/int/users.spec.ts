@@ -132,4 +132,12 @@ describe('users', () => {
 
     expect(updated.role).toBe('editor')
   })
+  it('lets only admins unlock an account locked by failed logins', async () => {
+    const { admin, editorA } = await createBaseFixture(payload)
+    const unlockAdminAs = (user: typeof admin) =>
+      payload.unlock({ collection: 'users', data: { email: admin.email }, overrideAccess: false, req: { user } })
+
+    await expect(unlockAdminAs(editorA)).rejects.toMatchObject({ status: 403 })
+    await expect(unlockAdminAs(admin)).resolves.toBe(true)
+  })
 })
