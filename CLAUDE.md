@@ -129,8 +129,9 @@ pnpm db:up                  # Postgres e SeaweedFS (Docker). Cria os bancos forj
 pnpm docker:up              # tudo do compose, incluindo o site pela imagem Docker, em http://localhost:3001 (banco forja_app, bucket forja-media-app)
 pnpm dev                    # site em http://localhost:3000, painel em /admin
 pnpm test                   # Vitest (usa o banco forja_test; precisa do db:up)
+pnpm test:coverage          # testes + cobertura; falha abaixo de 80% (o CI exige nos PRs para develop/main)
 pnpm test tests/int/games.spec.ts -t "nome do teste"   # um arquivo ou um teste
-pnpm typecheck && pnpm lint
+pnpm typecheck && pnpm lint      # o CI exige nos PRs para develop/main (check `static`)
 pnpm build
 docker build -t forja-site .   # imagem de deploy; o README explica as variáveis e o que roda na subida
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)

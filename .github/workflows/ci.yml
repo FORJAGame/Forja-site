@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check: tests
+            command: pnpm test
+          - check: coverage
+            command: pnpm test:coverage
+    name: ${{ matrix.check }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.6.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: sed "s/^PAYLOAD_SECRET=.*/PAYLOAD_SECRET=$(openssl rand -hex 32)/" .env.example > .env
+      - run: pnpm db:up
+      - run: ${{ matrix.command }}
+
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.6.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck && pnpm lint
+
+  # main only takes releases from develop.
+  source-branch:
+    if: github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - if: github.head_ref != 'develop' || github.event.pull_request.head.repo.full_name != github.repository
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          echo "PRs para a main só podem sair da develop (recebido: $HEAD_REF)."
+          exit 1
