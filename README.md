@@ -2,6 +2,7 @@
 
 Site da Forja, a iniciativa de desenvolvimento de jogos do CESAR. Next.js + Payload CMS + Postgres.
 As decisões de arquitetura e as regras do projeto estão no [`CLAUDE.md`](CLAUDE.md); o visual, no [`DESIGN.md`](DESIGN.md).
+Para contribuir (branches, PRs e releases), veja o [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Rodar localmente
 
