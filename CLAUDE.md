@@ -133,7 +133,7 @@ pnpm test:coverage          # testes + cobertura; falha abaixo de 80% (o CI exig
 pnpm test tests/int/games.spec.ts -t "nome do teste"   # um arquivo ou um teste
 pnpm typecheck && pnpm lint      # o CI exige nos PRs para develop/main (check `static`)
 pnpm build
-docker build -t forja-site .   # imagem de deploy; o README explica as variáveis e o que roda na subida
+docker build -t forja-site .   # imagem de deploy (o CI exige nos PRs, check `docker`); o README explica as variáveis e o que roda na subida
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção

@@ -44,6 +44,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck && pnpm lint
 
+  # The deploy artifact; the build needs no database (see Dockerfile).
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t forja-site .
+
   # main only takes releases from develop.
   source-branch:
     if: github.base_ref == 'main'
