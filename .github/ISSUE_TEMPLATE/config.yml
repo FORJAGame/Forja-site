@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Como rodar e manter o site
+    url: https://github.com/FORJAGame/Forja-site#readme
+    about: Instalação, variáveis de ambiente, deploy e design system estão no README.

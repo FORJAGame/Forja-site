@@ -1,0 +1,67 @@
+name: Problema
+description: Algo no site ou no painel não funciona como deveria.
+title: '[Problema] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por avisar! Não precisa saber programar para abrir esta issue: descreva o que você viu, do jeito que der.
+        **Não cole senhas, tokens nem o conteúdo do `.env`.**
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Onde aconteceu?
+      options:
+        - Site público (landing, guildas, jogos, artigos)
+        - Painel admin (/admin)
+        - Pré-visualização de rascunho
+        - Ambiente local ou deploy (Docker, banco, imagens)
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu?
+      placeholder: 'Ex.: ao publicar o jogo, apareceu o erro "Valor deve ser único" e nada foi salvo.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que você esperava que acontecesse?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      description: O passo a passo para ver o problema de novo.
+      placeholder: |
+        1. Entrar no painel como editor da guilda X
+        2. Abrir o jogo Y
+        3. Clicar em ...
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Link da página
+      placeholder: https://…/jogos/ecos-de-ferro
+
+  - type: input
+    id: device
+    attributes:
+      label: Dispositivo e navegador
+      placeholder: 'Ex.: celular Android, Chrome'
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Prints ou mensagens de erro
+      description: Arraste imagens para cá. Se for erro no terminal ou no log do container, cole o texto.
