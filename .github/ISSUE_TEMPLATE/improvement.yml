@@ -1,0 +1,52 @@
+name: Melhoria
+description: Uma ideia nova ou uma mudança no site ou no painel.
+title: '[Melhoria] '
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Comece pelo problema, não pela solução: entender quem precisa disso e por quê ajuda a achar o caminho mais simples.
+        Para corrigir um texto ou uma imagem de uma guilda ou jogo, use o painel (/admin). Não precisa de issue.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Site público (landing, guildas, jogos, artigos)
+        - Painel admin (/admin)
+        - Visual / design
+        - Infra, deploy ou documentação
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual é o problema ou a necessidade?
+      description: Quem passa por isso e em que situação?
+      placeholder: 'Ex.: os editores não sabem quando o admin aprovou o jogo deles.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: O que você sugere?
+      description: Rascunhos, prints ou links do Figma ajudam.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas que você considerou
+
+  - type: checkboxes
+    id: design
+    attributes:
+      label: Visual
+      description: Toda decisão visual segue o `DESIGN.md`. Se a ideia muda o visual, ele é atualizado antes do código.
+      options:
+        - label: Esta melhoria muda o visual do site
