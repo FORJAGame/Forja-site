@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "forja",
+      "credentials": [{ "accessKey": "forja", "secretKey": "forja-dev-secret" }],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    }
+  ]
+}

@@ -1,217 +1,6 @@
----
-version: alpha
-name: Forja — Arena
-description: Sistema visual do site da Forja, iniciativa de desenvolvimento de jogos do CESAR. Escuro, preto/vermelho/branco, títulos condensados em caixa-alta, cantos retos.
-colors:
-  primary: "#D21312"
-  primary-hover: "#E8201F"
-  primary-text: "#FF5A4F"
-  primary-tint: "#290E0F"
-  ember: "#3A0C0C"
-  neutral: "#060607"
-  surface: "#0D0D0F"
-  surface-raised: "#16161A"
-  on-surface: "#FFFFFF"
-  on-surface-variant: "#A1A1A6"
-  on-surface-muted: "#86868C"
-  outline: "#FFFFFF17"
-  outline-strong: "#FFFFFF2E"
-  divider: "#FFFFFF0F"
-  on-primary: "#FFFFFF"
-typography:
-  display-xl:
-    fontFamily: Saira Condensed
-    fontSize: 148px
-    fontWeight: 800
-    lineHeight: 0.88
-    letterSpacing: -0.01em
-  display-mobile:
-    fontFamily: Saira Condensed
-    fontSize: 60px
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: -0.005em
-  headline-lg:
-    fontFamily: Saira Condensed
-    fontSize: 72px
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: -0.005em
-  headline-lg-mobile:
-    fontFamily: Saira Condensed
-    fontSize: 48px
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: -0.005em
-  headline-md:
-    fontFamily: Saira Condensed
-    fontSize: 32px
-    fontWeight: 800
-    lineHeight: 1
-  headline-sm:
-    fontFamily: Saira Condensed
-    fontSize: 26px
-    fontWeight: 800
-    lineHeight: 1
-  title-list:
-    fontFamily: Saira Condensed
-    fontSize: 30px
-    fontWeight: 700
-    lineHeight: 1.05
-  stat:
-    fontFamily: Saira Condensed
-    fontSize: 104px
-    fontWeight: 800
-    lineHeight: 0.9
-  body-lg:
-    fontFamily: Inter
-    fontSize: 20px
-    fontWeight: 400
-    lineHeight: 1.55
-  body-md:
-    fontFamily: Inter
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.55
-  body-sm:
-    fontFamily: Inter
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.5
-  button:
-    fontFamily: Saira Condensed
-    fontSize: 19px
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: 0.04em
-  nav-link:
-    fontFamily: Saira Condensed
-    fontSize: 18px
-    fontWeight: 600
-    lineHeight: 1
-    letterSpacing: 0.04em
-  label-mono:
-    fontFamily: Geist Mono
-    fontSize: 12px
-    fontWeight: 400
-    lineHeight: 1.2
-    letterSpacing: 0.1em
-  label-mono-sm:
-    fontFamily: Geist Mono
-    fontSize: 11px
-    fontWeight: 500
-    lineHeight: 1.2
-    letterSpacing: 0.06em
-rounded:
-  none: 0px
-  xs: 2px
-  full: 9999px
-spacing:
-  unit: 8px
-  xs: 4px
-  sm: 8px
-  md: 16px
-  lg: 24px
-  xl: 32px
-  2xl: 56px
-  3xl: 72px
-  section: 120px
-  section-mobile: 72px
-  gutter: 24px
-  margin: 120px
-  margin-mobile: 24px
-  content-max: 1200px
-components:
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.button}"
-    rounded: "{rounded.xs}"
-    padding: 12px 26px
-  button-primary-hover:
-    backgroundColor: "{colors.primary-hover}"
-  button-secondary:
-    backgroundColor: transparent
-    textColor: "{colors.on-surface}"
-    typography: "{typography.button}"
-    rounded: "{rounded.xs}"
-    padding: 12px 26px
-    borderColor: "{colors.outline-strong}"
-  button-on-primary:
-    backgroundColor: "{colors.neutral}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.button}"
-    rounded: "{rounded.xs}"
-    padding: 14px 28px
-  eyebrow:
-    textColor: "{colors.primary-text}"
-    typography: "{typography.label-mono}"
-  nav:
-    backgroundColor: "{colors.neutral}"
-    textColor: "{colors.on-surface-variant}"
-    typography: "{typography.nav-link}"
-    height: 76px
-    borderColor: "{colors.outline}"
-  card:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.none}"
-    padding: 24px
-    borderColor: "{colors.outline}"
-  card-hover:
-    borderColor: "{colors.primary}"
-  card-accent-bar:
-    backgroundColor: "{colors.primary}"
-    width: 56px
-    height: 4px
-  card-cover:
-    backgroundColor: "{colors.ember}"
-  avatar-guild:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.label-mono}"
-    rounded: "{rounded.none}"
-    size: 56px
-  badge-status-dev:
-    backgroundColor: "{colors.primary-tint}"
-    textColor: "{colors.primary-text}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
-  badge-status-released:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
-  badge-status-paused:
-    backgroundColor: transparent
-    textColor: "{colors.on-surface-muted}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
-    borderColor: "{colors.outline-strong}"
-  chip:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.on-surface-variant}"
-    typography: "{typography.label-mono-sm}"
-    rounded: "{rounded.none}"
-    padding: 3px 8px
-  article-row:
-    typography: "{typography.title-list}"
-    padding: 32px 0px
-    borderColor: "{colors.outline}"
-  cta-block:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    padding: 80px 72px
-    rounded: "{rounded.none}"
----
-
 # Forja — Design System
 
-Protótipo de referência (Figma): https://www.figma.com/design/qLr3pgjNo0az2ZJVdMaBaQ/Forja
-- Página `01 · Direções`: as três direções exploradas (A Bigorna, B Oficina, **C Arena — escolhida**).
-- Página `02 · Landing`: landing desktop (1440) e mobile (390).
+**Tokens:** os valores (cores, tipografia, cantos, espaçamento) ficam só em `src/styles/tokens.css`, que é o `@theme` do Tailwind. Este documento usa os nomes dos tokens e explica quando usar cada um. Para mudar um valor, edite o CSS. Para criar ou remover um token, edite os dois arquivos. Os hexadecimais citados em `## Colors` justificam o contraste; se uma cor mudar, atualize também o texto.
 
 ## Overview
 
@@ -224,7 +13,7 @@ Por isso o sistema combina **impacto no topo e sobriedade no resto**. A referên
 
 Personalidade: **arena, oficina, energia contida**. Parece coisa de estúdio de games, não de agência nem de SaaS. É escuro do começo ao fim, sem seções claras.
 
-**Motivo gráfico: as fagulhas.** Os três estilhaços vermelhos da logo são o elemento visual recorrente. Aparecem grandes no hero, pequenas nas capas de placeholder e em preto translúcido sobre o bloco vermelho. Sempre acompanham **faixas diagonais a ~28°**, que repetem a inclinação dos cortes do letreiro. Os polígonos-base, extraídos da logo, estão no Figma, na camada `fagulhas`.
+**Motivo gráfico: as fagulhas.** Os três estilhaços vermelhos da logo são o elemento visual recorrente. Aparecem grandes no hero, pequenas nas capas de placeholder e em preto translúcido sobre o bloco vermelho. Sempre acompanham **faixas diagonais a ~28°**, que repetem a inclinação dos cortes do letreiro. Os polígonos-base, extraídos da logo, estão em `SHARD_POLYGONS` (`src/components/brand/Shards.tsx`).
 
 ## Colors
 
@@ -244,14 +33,14 @@ A paleta é preto, vermelho e branco, e nada mais. Tons neutros fazem a hierarqu
 
 São três famílias, cada uma com um papel fixo:
 
-- **Saira Condensed (700–800), sempre em CAIXA-ALTA:** a voz da marca. Aparece em títulos, nomes de guilda e de jogo, números grandes, botões e menu. É condensada e pesada como o letreiro da logo. O `letterSpacing` fica levemente negativo nos tamanhos grandes e positivo (+4%) em botões e menu.
+- **Saira Condensed (700–800), sempre em CAIXA-ALTA:** a voz da marca. Aparece em títulos, nomes de guilda e de jogo, números grandes, botões e menu. É condensada e pesada como o letreiro da logo. O espaçamento entre letras fica levemente negativo nos tamanhos grandes e positivo (+4%) em botões e menu.
 - **Inter (400–500):** todo texto corrido (descrições, sinopses, autores). Nunca em caixa-alta.
 - **Geist Mono (400–500), em CAIXA-ALTA com espaçamento aberto:** metadados e rótulos "técnicos", como a numeração de seção (`01 / O QUE É A FORJA`), contagens (`3 JOGOS · 12 MEMBROS`), status, veículo do artigo e rodapé.
 
 Regras:
 - **Destaque do hero:** uma única palavra (ou expressão) fica em `primary`. Na landing é "FORJADOS."
 - **Tamanho no mobile:** o `display` cai de 148px para 60px e os títulos de seção de 72px para 48px, sempre mantendo a quebra de linha intencional.
-- A caixa-alta não é um token. Aplique com `text-transform: uppercase` nas classes de Saira Condensed e Geist Mono.
+- As classes `type-<token>` de Saira Condensed e Geist Mono já aplicam `text-transform: uppercase`.
 
 ## Layout
 
@@ -260,6 +49,8 @@ Regras:
 - **Ritmo vertical:** 120px entre seções no desktop e 72px no mobile. Cada seção é separada por uma linha fina (`divider`) no topo.
 - **Cabeçalho de seção:** rótulo mono numerado em `primary-text`, título grande em Saira Condensed em duas linhas e, à direita, um link "VER TODOS →" quando houver.
 - **Espaçamento:** tudo em múltiplos de 8px, com meio passo de 4px para ajustes finos.
+- **Medida de leitura (`measure`, 680px):** largura máxima de texto corrido (descrições, rich text, subtítulos longos), para as linhas não passarem de ~75 caracteres.
+- **Breakpoints:** mobile até 767px; `md` a partir de 768px (grades de 2–3 colunas, espaçamentos de desktop); `lg` a partir de 1024px (grade de 4 colunas de guildas e o título `display-xl` do hero, que não cabe antes disso).
 
 ## Elevation & Depth
 
@@ -279,6 +70,26 @@ A forma é **reta e angular**, como os cortes da logo.
 
 ## Components
 
+Medidas e tokens de cada componente:
+
+| Componente | Fundo | Texto | Tipografia | Canto | Medidas |
+|---|---|---|---|---|---|
+| `button-primary` | `primary` (hover: `primary-hover`) | `on-primary` | `button` | `xs` | padding 12px 26px |
+| `button-secondary` | transparente, borda `outline-strong` | `on-surface` | `button` | `xs` | padding 12px 26px |
+| `button-on-primary` | `neutral` | `on-surface` | `button` | `xs` | padding 14px 28px |
+| `eyebrow` (rótulo de seção) | — | `primary-text` | `label-mono` | — | — |
+| `nav` | `neutral`, borda inferior `outline` | `on-surface-variant` | `nav-link` | — | altura 76px |
+| `card` | `surface`, borda `outline` (hover: `primary`) | — | — | `none` | padding 24px |
+| `card-accent-bar` | `primary` | — | — | — | 56×4px |
+| `card-cover` | `ember` | — | — | — | — |
+| `avatar-guild` | `surface-raised` | `on-surface` | `label-mono` | `none` | 56×56px |
+| `badge-status-dev` | `primary-tint` | `primary-text` | `label-mono-sm` | `none` | padding 4px 8px |
+| `badge-status-released` | `surface-raised` | `on-surface` | `label-mono-sm` | `none` | padding 4px 8px |
+| `badge-status-paused` | transparente, borda `outline-strong` | `on-surface-muted` | `label-mono-sm` | `none` | padding 4px 8px |
+| `chip` | `surface-raised` | `on-surface-variant` | `label-mono-sm` | `none` | padding 3px 8px |
+| `article-row` | borda `outline` | — | `title-list` | — | padding 32px 0 |
+| `cta-block` | `primary` | `on-primary` | — | `none` | padding 80px 72px |
+
 - **Botões:** o `button-primary` (vermelho) é a ação principal, no máximo um por tela ou bloco ("Entre para uma guilda", "Participe"). O `button-secondary` tem só contorno e é a ação secundária ("Ver jogos →"). O `button-on-primary` (preto) é usado só sobre o bloco vermelho. No mobile os botões ocupam a largura toda e ficam empilhados.
 - **Menu:** barra de ponta a ponta com 76px de altura e uma linha fina embaixo. Logo à esquerda, links no centro (Guildas, Jogos, Artigos, Sobre) e "Participe" à direita. No mobile vira logo + ícone de menu (hambúrguer).
 - **Card de guilda:** avatar quadrado de 56px com as iniciais em mono, nome em `headline-md`, foco da guilda em `body-sm` com cor `muted` e contagem em `label-mono-sm`. No mobile vira uma linha: avatar, nome e "→".
@@ -289,6 +100,15 @@ A forma é **reta e angular**, como os cortes da logo.
 - **Bloco "Apoie" (`cta-block`):** o único bloco com fundo vermelho no site, com fagulhas em preto a 22% e faixas diagonais pretas a 8–10%.
 - **Capa de placeholder:** gradiente diagonal de `ember` para `surface-raised`, com fagulhas pequenas a 45%. Aparece enquanto a guilda não sobe uma imagem.
 - **Rodapé:** a logo com uma frase curta, colunas (Navegação, Redes, Contato) e uma linha final em mono.
+- **Foco:** todo elemento interativo mostra, em `:focus-visible`, um contorno de 2px em `primary-text` com 2px de afastamento. Nunca remova o foco sem colocar outro indicador no lugar.
+- **Números grandes no mobile:** `stat-mobile` (56px) abaixo de `md`.
+- **Cabeçalho de página (`PageHeader`):** usado nas páginas internas. Rótulo mono em `primary-text`, título `headline-lg` (48px no mobile) com quebras intencionais e, opcionalmente, um parágrafo `body-lg` em `on-surface-variant` limitado à `measure`. É o único `h1` da página.
+- **Link de volta (`BackLink`):** "← Todas as guildas", em `type-button` e `on-surface-variant`, no topo das páginas de detalhe. A seta desloca 4px para a esquerda no hover.
+- **Rich text:** parágrafos `body-lg` em `on-surface-variant`; `h2` em `headline-sm` (menor que o título da seção, que é `headline-md`) e `h3` em `body-lg` peso 600, ambos em `on-surface`; listas com marcador quadrado em `primary`; links em `on-surface` sublinhados (nunca vermelhos); tudo limitado à `measure`.
+- **Setas (→ ↗ ←):** sempre desenhadas com a Inter, mesmo dentro de textos em Saira Condensed, que não tem esses glifos (o navegador cairia numa fonte de emoji).
+- **Trailer:** embed do YouTube em modo sem cookies (`youtube-nocookie.com`), 16:9, com borda `outline` e cantos retos. Carrega sob demanda (`loading="lazy"`).
+- **Galeria:** grade de imagens 16:9 com cantos retos; 1 coluna no mobile, 2 em `md`, 3 em `lg`; `gap` de `md`.
+- **Faixa de pré-visualização:** barra fixa no rodapé da tela, fundo `surface-raised` com borda superior `primary`, rótulo mono "Pré-visualização do rascunho" em `primary-text` e o link "Sair da pré-visualização". Só aparece para quem abriu o preview pelo painel.
 
 ## Do's and Don'ts
 
@@ -304,17 +124,52 @@ A forma é **reta e angular**, como os cortes da logo.
 - **Não faça:** usar Saira Condensed em parágrafos, nem Inter em caixa-alta.
 - **Não faça:** repetir a logo inteira como decoração. O que se repete são as fagulhas, não o letreiro.
 
+## Motion
+
+A animação reforça a ideia de **"forja"**: coisas que cortam, faíscam e se encaixam. É rápida, direta e sempre com propósito. Nada flutua nem quica. Implementação com **Motion** (`motion/react`) em componentes reutilizáveis.
+
+**Curvas e durações**
+- Easing padrão: `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out forte), com ataque rápido e pouso suave.
+- Micro-interações (hover, foco, press): 150–200ms.
+- Entradas de elementos: 400–600ms.
+- Momento do hero: até ~1,2s no total, só no primeiro carregamento.
+- Stagger entre itens de uma lista ou grade: 60–80ms.
+
+**Momentos**
+- **Hero ("golpe"):** as fagulhas entram em diagonal (~28°), vindo de fora para a posição final, com leve sobre-escala que se assenta. As faixas diagonais deslizam logo em seguida. As linhas do título sobem uma a uma, revelando o texto por uma máscara. "FORJADOS." acende por último em vermelho. Depois vêm o subtítulo e os botões.
+- **Entradas por scroll:** cabeçalhos de seção, cards e linhas de artigo aparecem com fade e um deslocamento de 16–24px para cima, uma única vez, quando entram na tela. Os grids usam stagger.
+- **Números grandes (stat):** contam de 0 até o valor quando entram na tela.
+- **Hover em card:** a barra de acento cresce de 56px até a largura total, a borda passa para `primary` e a capa ganha um leve zoom (1.03).
+- **Hover em botão:** o primário vai para `primary-hover`. Os links com "→" deslocam a seta 4px.
+- **Fagulhas no hero:** um parallax sutil com o scroll (no máximo ~40px). Nada além disso.
+
+**Regras**
+- Respeite `prefers-reduced-motion`: sem deslocamentos, parallax nem contagem. O conteúdo aparece direto, com no máximo um fade curto.
+- Anime só `transform` e `opacity` (performance). Nunca anime layout.
+- Nada de scroll-jacking, loops infinitos chamando atenção, animação atrasando conteúdo ou entrada que se repete toda vez que o elemento reaparece.
+- O conteúdo precisa estar legível e clicável mesmo antes de qualquer animação terminar.
+
 ## Page Patterns
 
 Estrutura da landing (`/`):
 
 1. **Hero:** rótulo mono, "ONDE JOGOS SÃO FORJADOS." (com "FORJADOS." em vermelho), uma frase de apoio, "Entre para uma guilda" e "Ver jogos", mais uma linha mono com os pilares.
 2. **01 / O que é a Forja:** texto curto e 3 números grandes (guildas, jogos, artigos).
-3. **02 / Como funciona:** Seleção, Guilda e Publique. *O processo de seleção ainda está por definir com a coordenação.*
+3. **02 / Como funciona:** Seleção, Guilda e Publique.
 4. **03 / Guildas:** grade 4×N, com link para `/guildas/[slug]`.
 5. **04 / Jogos em destaque:** 3 cards, com link para `/jogos`.
 6. **05 / Artigos recentes:** as 3 linhas mais recentes, com link para `/artigos`.
-7. **06 / Apoie a Forja:** bloco vermelho, "Fale com a gente" e e-mail de contato (*provisório: `forja@exemplo.com`*).
+7. **06 / Apoie a Forja:** bloco vermelho, "Fale com a gente" e e-mail de contato.
 8. **Rodapé.**
 
 As páginas internas (guilda, jogo, `/artigos`) reaproveitam os mesmos componentes: cabeçalho de seção, cards, linha de artigo e badges.
+
+Páginas internas (mesmo cabeçalho, rodapé e tokens da landing; sem hero cinematográfico).
+
+- **`/guildas`:** `PageHeader` ("Guildas" / "Todas as\nguildas."), grade de cards de guilda (4 colunas em `lg`, 2 em `md`, lista compacta no mobile), em ordem alfabética.
+- **`/guildas/[slug]`:** `BackLink`; capa `banner` (12:5, placeholder de fagulhas); identidade (avatar, rótulo "Guilda", nome em `headline-lg`, descrição curta); links externos (Instagram, itch.io…) como `ArrowLink` ↗; seções "Sobre" (rich text), "Jogos" (grade de cards de jogo) e "Membros" (lista em colunas), cada uma só se tiver conteúdo.
+- **`/jogos`:** `PageHeader` ("Jogos" / "Feito nas\nguildas."), grade de cards de jogo (3 colunas em `lg`, 2 em `md`, 1 no mobile), mais recentes primeiro.
+- **`/jogos/[slug]`:** `BackLink`; em `lg`, duas colunas: à esquerda status, título `headline-lg`, guilda (link), sinopse `body-lg`, botão "Jogar" (primário, se houver link), plataformas e data; à direita a capa 16:9. Abaixo, seções "Trailer", "Sobre o jogo" (rich text), "Galeria" e "Créditos", cada uma só se tiver conteúdo.
+- **`/artigos`:** `PageHeader` ("Pesquisa" / "Artigos das\nguildas."), lista de linhas de artigo, mais recentes primeiro.
+- **Página não encontrada:** rótulo "404", título "Página não\nencontrada." e botão "Voltar ao início".
+- Seções internas usam `SectionTitle` (`h2` em `headline-md`) em vez do cabeçalho numerado da landing. Cards lado a lado têm sempre a mesma altura.

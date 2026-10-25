@@ -1,0 +1,16 @@
+.git
+.env
+.env*.local
+node_modules
+.next
+media
+tests
+docs
+coverage
+.superpowers
+.playwright-mcp
+.claude
+.vscode
+*.tsbuildinfo
+Dockerfile
+.dockerignore
