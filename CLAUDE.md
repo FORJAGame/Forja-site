@@ -16,30 +16,32 @@ Estado atual: **fase de design, ainda sem código.** Status geral: em avaliaçã
 - Uma página por guilda e, dentro dela, as páginas dos jogos (texto, imagens, vídeos). Cada tipo de página tem template fixo.
 - Cada guilda edita o próprio conteúdo sem código (há guildas formadas só por designers).
 - Nada vai ao ar sem aprovação de um admin, **inclusive edições de páginas já publicadas**.
-- Custo idealmente zero (Vercel + Neon/Supabase, ou infraestrutura da faculdade).
+- Custo idealmente zero (planos gratuitos ou infraestrutura da faculdade), sem depender de um provedor específico.
 
 ## Stack
 
-Um único app Next.js, com um único deploy:
+Um único app Next.js, entregue como uma única imagem Docker:
 
 | Camada | Escolha |
 |---|---|
 | Front e back | **Next.js** (App Router). As páginas públicas são Server Components. |
 | CMS e painel admin | **Payload 3** (TypeScript, roda dentro do Next.js) |
-| Banco | **Postgres**: Neon em produção, Docker Compose no ambiente local |
+| Banco | **Postgres**: qualquer Postgres na nuvem, Docker Compose no ambiente local |
 | Acesso a dados | **Adaptador Postgres do Payload** (`@payloadcms/db-postgres`) e **Local API** (`payload.find()`, etc.) |
-| Mídia | `@payloadcms/storage-s3`: **SeaweedFS** no ambiente local (Docker Compose) e **Cloudflare R2** no deploy. O Payload serve as imagens por `/api/media/file/...`; o bucket fica privado. Vídeo só por embed do YouTube. |
+| Mídia | `@payloadcms/storage-s3`: **SeaweedFS** no ambiente local (Docker Compose) e qualquer bucket compatível com S3 na nuvem. O Payload serve as imagens por `/api/media/file/...`; o bucket fica privado. Vídeo só por embed do YouTube. |
 | Estilo | **Tailwind v4**, com os tokens no `@theme` de `src/styles/tokens.css` |
 | Fontes | `next/font` (Saira Condensed, Inter) e o pacote `geist` (Geist Mono) |
 | Animação | **Motion** (`motion/react`), seguindo a seção `## Motion` do `DESIGN.md` |
 | Rich text | Lexical (padrão do Payload), limitado a poucos blocos para manter o template fixo |
 | Testes | **Vitest**, com foco nas regras de acesso |
 | Pacotes | pnpm |
+| Deploy | **Imagem Docker** (`Dockerfile`), que roda em qualquer host de container |
 
 **Decisões que não devem ser revertidas:**
 - **Sem Prisma.** O Payload já gera o schema e as migrações a partir das coleções. Um segundo ORM duplicaria o schema e, pior, as leituras feitas por ele pulariam as regras de acesso. Leia e grave dados sempre pela Local API.
 - **Sem Resend, Inngest ou cron.** Para refletir uma publicação no site, use o hook `afterChange` do Payload chamando `revalidatePath`. Quando o e-mail entrar (ver "Admins" abaixo), use `@payloadcms/email-nodemailer` com SMTP.
-- **Neon, não Supabase.** O free do Neon escala a zero e volta sozinho. O free do Supabase **pausa o projeto após ~7 dias sem atividade**, e um site de pouco tráfego com páginas cacheadas pode cair nisso.
+- **Sem acoplamento a provedor.** O app fala só com um Postgres (`DATABASE_URL`) e uma API S3 (`S3_*`), e roda como imagem Docker. Nada de arquivos ou scripts de um host específico (`vercel.json`, `railway.json`, `vercel-build`…): a Forja precisa poder trocar de hospedagem sem mexer no código.
+- **Imagem buildada sem banco.** O build da imagem usa `next build --experimental-build-mode compile`, e o pré-render (`generate`) roda quando o container sobe, já com o banco do ambiente (`docker/app/entrypoint.sh`). Assim a mesma imagem serve para dev e prod.
 - **Sem MinIO.** A edição comunitária foi arquivada em 2026 e as imagens oficiais não baixam mais. O S3 local é o SeaweedFS, com a versão fixada no `docker-compose.yml`.
 
 As versões exatas vêm do template oficial do Payload, na hora de criar o projeto.
@@ -49,7 +51,7 @@ As versões exatas vêm do template oficial do Payload, na hora de criar o proje
 O Payload substitui o painel admin feito na mão: ele já entrega autenticação, papéis, upload, editor de rich text, versionamento e o painel. Sobram para implementar o modelo de conteúdo, as regras de acesso e o front.
 
 - **Coleções:** `guilds`, `games`, `articles`, `users`, `media`.
-- **Deploy:** Vercel, com Postgres no Neon.
+- **Deploy:** um container (ver `README.md`, seções "Arquitetura" e "Imagem Docker"). Rode **uma única instância**: o cache das páginas fica no disco do container e a revalidação ao publicar só limpa o cache dela.
 
 ### Regras de acesso (núcleo do sistema)
 
@@ -92,7 +94,6 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
 
 - **Repetir o destino do WordPress.** Se ninguém na Forja souber manter, o site morre igual. O risco principal é a entrega, não o código.
 - **Contas de infra** devem ser criadas numa organização no GitHub, com o e-mail institucional do CESAR (que é permanente), nunca com conta pessoal.
-- **Vercel Hobby** é para uso pessoal e não comercial, e não tem times (o Pro custa US$ 20 por membro/mês).
 - **Deploy de dev em contas pessoais:** serve para apresentar o MVP. Se a Forja adotar o site, a produção nasce nas contas institucionais; não promova o ambiente de dev a produção.
 - **Imagens são públicas:** qualquer upload em `media` pode ser listado e acessado por URL, inclusive imagens de jogos ainda em rascunho. Aceito por ora; avisar no guia de editores.
 - **Autosave enche a fila de aprovação:** com o autosave, uma edição em andamento já aparece em "Aguardando aprovação". Os admins devem aprovar quando o editor avisar que terminou.
@@ -124,12 +125,14 @@ Os artigos são **só vitrine**: não são lidos no site e não aparecem na pág
 ## Comandos
 
 ```bash
-pnpm db:up                  # Postgres e SeaweedFS (Docker). Cria os bancos forja/forja_test e os buckets
+pnpm db:up                  # Postgres e SeaweedFS (Docker). Cria os bancos forja/forja_test/forja_app e os buckets
+pnpm docker:up              # tudo do compose, incluindo o site pela imagem Docker, em http://localhost:3001 (banco forja_app, bucket forja-media-app)
 pnpm dev                    # site em http://localhost:3000, painel em /admin
 pnpm test                   # Vitest (usa o banco forja_test; precisa do db:up)
 pnpm test tests/int/games.spec.ts -t "nome do teste"   # um arquivo ou um teste
 pnpm typecheck && pnpm lint
 pnpm build
+docker build -t forja-site .   # imagem de deploy; o README explica as variáveis e o que roda na subida
 pnpm generate:types         # depois de mudar qualquer coleção (atualiza src/payload-types.ts)
 pnpm generate:importmap     # depois de registrar componente customizado no admin
 pnpm payload migrate:create <nome>   # ao mudar o schema, antes de ir para produção
@@ -145,9 +148,10 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 - **Histórico de versões:** o `readVersions` consulta a tabela de versões, então usa `parent` (guildas) e `version.guild` (jogos), não os campos do documento.
 - **Slug:** `src/fields/slug.ts` usa o `slugField` do Payload. O slug acompanha o título durante o autosave até a primeira publicação ou até alguém editá-lo à mão; depois fica fixo, para não quebrar links.
 - **Rascunho abandonado:** com autosave, abrir "Criar novo" já cria um rascunho vazio. Rascunhos sem título ficam fora da fila de aprovação, e o editor pode excluir jogos da própria guilda que nunca foram publicados (`adminOrOwnGuildUnpublished`).
+- **Subida do container:** `docker/app/entrypoint.sh` roda `scripts/check-database.ts` (mensagem clara se faltar variável ou o banco não responder; a lógica fica em `src/config/database.ts`), `payload migrate`, o pré-render e o `next start`.
 - **Variáveis de ambiente:** `src/config/env.ts` (`readServerEnv`) valida tudo o que o servidor precisa e falha com os nomes do que falta. Nova variável obrigatória entra lá, no `.env.example` e na tabela do `README.md`.
-- **Push de schema só em banco local:** o Payload sincroniza o schema sozinho (`push`) apenas quando o `DATABASE_URL` aponta para `localhost`/`127.0.0.1` (`pushDevSchema`). Em qualquer outro banco, o schema muda só por migração: um push marca o banco e faz o `payload migrate` do deploy travar numa pergunta.
-- **Imagens:** `src/collections/Media.ts` (limite de 4 MB, por causa do limite de 4,5 MB da Vercel) e o `s3Storage` em `src/payload.config.ts`. Os testes usam o bucket `forja-media-test`. Em scripts, passe um `context` novo a cada chamada da Local API: o adaptador grava marcadores nele, e um objeto compartilhado faz os uploads seguintes pularem o bucket (ver `src/seed/seed.ts`).
+- **Push de schema só em banco local:** o Payload sincroniza o schema sozinho (`push`) apenas quando o `DATABASE_URL` aponta para `localhost`/`127.0.0.1` (`pushDevSchema`). Em qualquer outro banco, o schema muda só por migração: um push marca o banco e faz o `payload migrate` da subida do container travar numa pergunta.
+- **Imagens:** `src/collections/Media.ts` (limite de 4 MB, para caber no limite de corpo de requisição comum em hosts e proxies) e o `s3Storage` em `src/payload.config.ts`. Os testes usam o bucket `forja-media-test`. Em scripts, passe um `context` novo a cada chamada da Local API: o adaptador grava marcadores nele, e um objeto compartilhado faz os uploads seguintes pularem o bucket (ver `src/seed/seed.ts`).
 - **Sempre existe um admin:** `src/hooks/keepOneAdmin.ts` impede rebaixar ou excluir o último admin.
 - **Editor sempre na própria guilda:** `src/hooks/assignOwnGuild.ts` (jogos) e o acesso `adminOrOwnGuild`.
 - **Fila de aprovação:** `src/lib/pendingReviews.ts` + `src/components/admin/PendingReviews.tsx` (topo do dashboard, só para admins).

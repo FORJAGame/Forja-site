@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminOnly, anyone, authenticated } from '@/access'
 
-// Vercel rejects request bodies above 4.5 MB, and uploads pass through the Payload API.
+// Many hosts and proxies reject request bodies above ~4.5 MB, and uploads pass through the Payload API.
 export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024
 
 export const Media: CollectionConfig = {

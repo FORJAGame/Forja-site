@@ -52,7 +52,7 @@ export const readServerEnv = (env: Record<string, string | undefined> = process.
 
   return {
     databaseUrl: read('DATABASE_URL'),
-    // A dev push marks the database as push-managed, and every later `payload migrate` (the deploy build) stops on a prompt.
+    // A dev push marks the database as push-managed, and every later `payload migrate` (at container start) stops on a prompt.
     pushDevSchema: isLocalDatabase(read('DATABASE_URL')),
     payloadSecret: read('PAYLOAD_SECRET'),
     storage: {
