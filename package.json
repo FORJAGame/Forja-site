@@ -14,7 +14,7 @@
     "test": "cross-env NODE_OPTIONS=--no-deprecation vitest run",
     "test:coverage": "cross-env NODE_OPTIONS=--no-deprecation vitest run --coverage",
     "test:watch": "cross-env NODE_OPTIONS=--no-deprecation vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "db:up": "docker compose up -d --wait postgres storage && docker compose run --rm storage-buckets",
     "db:down": "docker compose down",
     "docker:up": "docker compose up -d --build",
