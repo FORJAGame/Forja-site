@@ -64,6 +64,39 @@ describe('autosave', () => {
     expect(latest.slug).toBe('ecos-de-vidro')
   })
 
+  it('gives a new draft a free slug when another guild already uses the title', async () => {
+    const { admin, editorA, guildA, guildB } = await createBaseFixture(payload)
+    await createGame(payload, guildB.id, { title: 'Ecos' })
+    const asEditor = { user: editorA, overrideAccess: false, draft: true } as const
+    const draft = await payload.create({ collection: 'games', data: { guild: guildA.id } as never, ...asEditor })
+
+    const firstPause = await payload.update({ collection: 'games', id: draft.id, data: { title: 'Ecos' }, autosave: true, ...asEditor })
+    expect(firstPause.slug).toBe('ecos-2')
+
+    // The next autosave sends the slug back from the form; it must not count as a taken slug.
+    await payload.update({ collection: 'games', id: draft.id, data: { title: 'Ecos', slug: firstPause.slug }, autosave: true, ...asEditor })
+    const latest = await payload.findByID({ collection: 'games', id: draft.id, ...asEditor })
+    expect(latest.slug).toBe('ecos-2')
+
+    const published = await payload.update({ collection: 'games', id: draft.id, data: { synopsis: 'Outro Ecos.', _status: 'published' }, user: admin, overrideAccess: false })
+    expect(published.slug).toBe('ecos-2')
+  })
+
+  it('does not count the document itself as a taken slug', async () => {
+    const { admin, guildA } = await createBaseFixture(payload)
+    const draft = await payload.create({
+      collection: 'games',
+      data: { title: 'Ecos', synopsis: 'Um jogo.', guild: guildA.id, developmentStatus: 'in-development' } as never,
+      draft: true,
+      user: admin,
+      overrideAccess: false,
+    })
+    expect(draft.slug).toBe('ecos')
+
+    const published = await payload.update({ collection: 'games', id: draft.id, data: { _status: 'published' }, user: admin, overrideAccess: false })
+    expect(published.slug).toBe('ecos')
+  })
+
   it('keeps a slug the editor typed by hand', async () => {
     const { editorA, guildA } = await createBaseFixture(payload)
     const asEditor = { user: editorA, overrideAccess: false, draft: true } as const

@@ -44,7 +44,7 @@ export const Games: CollectionConfig = {
   },
   fields: [
     { name: 'title', label: 'Título', type: 'text', required: true },
-    slugField('title'),
+    slugField('title', 'games'),
     {
       name: 'guild',
       label: 'Guilda',

@@ -39,7 +39,7 @@ export const Guilds: CollectionConfig = {
   },
   fields: [
     { name: 'name', label: 'Nome', type: 'text', required: true },
-    slugField('name'),
+    slugField('name', 'guilds'),
     {
       name: 'shortDescription',
       label: 'Descrição curta',
