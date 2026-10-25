@@ -26,7 +26,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: cp .env.example .env
+      - run: sed "s/^PAYLOAD_SECRET=.*/PAYLOAD_SECRET=$(openssl rand -hex 32)/" .env.example > .env
       - run: pnpm db:up
       - run: ${{ matrix.command }}
 
