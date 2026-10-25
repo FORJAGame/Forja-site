@@ -69,6 +69,19 @@ describe('getLandingData', () => {
     expect(games[0].guildName).toBe('Aurora')
   })
 
+  it('does not feature an old game again just because a correction was republished', async () => {
+    const { guildA } = await createBaseFixture(payload)
+    const oldest = await createGame(payload, guildA.id, { title: 'Primeiro' })
+    for (const title of ['Segundo', 'Terceiro', 'Quarto']) {
+      await createGame(payload, guildA.id, { title })
+    }
+
+    await payload.update({ collection: 'games', id: oldest.id, data: { synopsis: 'Sinopse corrigida.', _status: 'published' } })
+
+    const { games } = await getLandingData(payload)
+    expect(games.map((game) => game.title)).toEqual(['Quarto', 'Terceiro', 'Segundo'])
+  })
+
   it('lists the three most recent articles by publication date', async () => {
     await createArticle(payload, { title: 'Antigo', date: '2024-01-01T00:00:00.000Z' })
     await createArticle(payload, { title: 'Novo', date: '2026-06-01T00:00:00.000Z' })

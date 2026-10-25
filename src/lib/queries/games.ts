@@ -9,7 +9,7 @@ export const listGames = async (payload: Payload): Promise<GameCardView[]> => {
   const { docs } = await payload.find({
     collection: 'games',
     overrideAccess: false,
-    sort: '-publishedAt',
+    sort: '-createdAt',
     pagination: false,
     depth: 1,
   })
