@@ -1,9 +1,5 @@
 # Forja — Design System
 
-Protótipo de referência (Figma): https://www.figma.com/design/qLr3pgjNo0az2ZJVdMaBaQ/Forja
-- Página `01 · Direções`: as três direções exploradas (A Bigorna, B Oficina, **C Arena — escolhida**).
-- Página `02 · Landing`: landing desktop (1440) e mobile (390).
-
 **Tokens:** os valores (cores, tipografia, cantos, espaçamento) ficam só em `src/styles/tokens.css`, que é o `@theme` do Tailwind. Este documento usa os nomes dos tokens e explica quando usar cada um. Para mudar um valor, edite o CSS. Para criar ou remover um token, edite os dois arquivos. Os hexadecimais citados em `## Colors` justificam o contraste; se uma cor mudar, atualize também o texto.
 
 ## Overview
@@ -17,7 +13,7 @@ Por isso o sistema combina **impacto no topo e sobriedade no resto**. A referên
 
 Personalidade: **arena, oficina, energia contida**. Parece coisa de estúdio de games, não de agência nem de SaaS. É escuro do começo ao fim, sem seções claras.
 
-**Motivo gráfico: as fagulhas.** Os três estilhaços vermelhos da logo são o elemento visual recorrente. Aparecem grandes no hero, pequenas nas capas de placeholder e em preto translúcido sobre o bloco vermelho. Sempre acompanham **faixas diagonais a ~28°**, que repetem a inclinação dos cortes do letreiro. Os polígonos-base, extraídos da logo, estão no Figma, na camada `fagulhas`.
+**Motivo gráfico: as fagulhas.** Os três estilhaços vermelhos da logo são o elemento visual recorrente. Aparecem grandes no hero, pequenas nas capas de placeholder e em preto translúcido sobre o bloco vermelho. Sempre acompanham **faixas diagonais a ~28°**, que repetem a inclinação dos cortes do letreiro. Os polígonos-base, extraídos da logo, estão em `SHARD_POLYGONS` (`src/components/brand/Shards.tsx`).
 
 ## Colors
 
@@ -159,16 +155,16 @@ Estrutura da landing (`/`):
 
 1. **Hero:** rótulo mono, "ONDE JOGOS SÃO FORJADOS." (com "FORJADOS." em vermelho), uma frase de apoio, "Entre para uma guilda" e "Ver jogos", mais uma linha mono com os pilares.
 2. **01 / O que é a Forja:** texto curto e 3 números grandes (guildas, jogos, artigos).
-3. **02 / Como funciona:** Seleção, Guilda e Publique. *O processo de seleção ainda está por definir com a coordenação.*
+3. **02 / Como funciona:** Seleção, Guilda e Publique.
 4. **03 / Guildas:** grade 4×N, com link para `/guildas/[slug]`.
 5. **04 / Jogos em destaque:** 3 cards, com link para `/jogos`.
 6. **05 / Artigos recentes:** as 3 linhas mais recentes, com link para `/artigos`.
-7. **06 / Apoie a Forja:** bloco vermelho, "Fale com a gente" e e-mail de contato (*provisório: `forja@exemplo.com`*).
+7. **06 / Apoie a Forja:** bloco vermelho, "Fale com a gente" e e-mail de contato.
 8. **Rodapé.**
 
 As páginas internas (guilda, jogo, `/artigos`) reaproveitam os mesmos componentes: cabeçalho de seção, cards, linha de artigo e badges.
 
-Páginas internas (mesmo cabeçalho, rodapé e tokens da landing; sem hero cinematográfico). Protótipo: Figma, página `03 · Páginas internas`.
+Páginas internas (mesmo cabeçalho, rodapé e tokens da landing; sem hero cinematográfico).
 
 - **`/guildas`:** `PageHeader` ("Guildas" / "Todas as\nguildas."), grade de cards de guilda (4 colunas em `lg`, 2 em `md`, lista compacta no mobile), em ordem alfabética.
 - **`/guildas/[slug]`:** `BackLink`; capa `banner` (12:5, placeholder de fagulhas); identidade (avatar, rótulo "Guilda", nome em `headline-lg`, descrição curta); links externos (Instagram, itch.io…) como `ArrowLink` ↗; seções "Sobre" (rich text), "Jogos" (grade de cards de jogo) e "Membros" (lista em colunas), cada uma só se tiver conteúdo.

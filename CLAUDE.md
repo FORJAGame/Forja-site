@@ -187,7 +187,6 @@ Setup inicial: `cp .env.example .env` e gerar um `PAYLOAD_SECRET` (`openssl rand
 - Use os tokens (ex.: `bg-primary`, `type-headline-lg`, `py-section`). Não use valores soltos no código.
 - Antes de criar um componente novo, veja se ele já está descrito em `## Components` ou em `## Page Patterns`. Para animações, siga `## Motion`.
 - Se uma decisão exigir algo que o `DESIGN.md` não cobre ou que o contradiz, **atualize o `DESIGN.md` primeiro** (com o motivo) e só depois implemente. Nunca diverja em silêncio.
-- Protótipo de referência no Figma: https://www.figma.com/design/qLr3pgjNo0az2ZJVdMaBaQ/Forja (página `02 · Landing`, desktop e mobile). Onde o Figma e o `DESIGN.md` divergirem, vale o `DESIGN.md`.
 
 
 ## Arquivos
