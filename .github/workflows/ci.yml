@@ -30,6 +30,20 @@ jobs:
       - run: pnpm db:up
       - run: ${{ matrix.command }}
 
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.6.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck && pnpm lint
+
   # main only takes releases from develop.
   source-branch:
     if: github.base_ref == 'main'
