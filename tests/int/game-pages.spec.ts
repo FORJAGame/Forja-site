@@ -3,6 +3,7 @@ import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { listArticles } from '@/lib/queries/articles'
 import { getGamePage, listGames, listGameSlugs } from '@/lib/queries/games'
+import { getGuildPage } from '@/lib/queries/guilds'
 
 import {
   createArticle,
@@ -31,6 +32,17 @@ describe('game pages', () => {
 
     expect((await listGames(payload)).map((game) => game.title)).toEqual(['Segundo', 'Primeiro'])
     expect((await listGameSlugs(payload)).sort()).toEqual(['primeiro', 'segundo'])
+  })
+
+  it('keeps an old game in place when a correction is republished', async () => {
+    const { guildA } = await createBaseFixture(payload)
+    const older = await createGame(payload, guildA.id, { title: 'Primeiro' })
+    await createGame(payload, guildA.id, { title: 'Segundo' })
+
+    await payload.update({ collection: 'games', id: older.id, data: { synopsis: 'Sinopse corrigida.', _status: 'published' } })
+
+    expect((await listGames(payload)).map((game) => game.title)).toEqual(['Segundo', 'Primeiro'])
+    expect((await getGuildPage(payload, guildA.slug))?.games.map((game) => game.title)).toEqual(['Segundo', 'Primeiro'])
   })
 
   it('builds the game page with guild link, trailer id, date and credits', async () => {

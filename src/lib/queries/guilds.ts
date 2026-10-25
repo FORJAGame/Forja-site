@@ -26,7 +26,7 @@ export const getGuildPage = async (
     collection: 'games',
     overrideAccess: false,
     where: { guild: { equals: guild.id } },
-    sort: '-publishedAt',
+    sort: '-createdAt',
     pagination: false,
     depth: 1,
   })

@@ -29,7 +29,7 @@ const asVisitor = { overrideAccess: false } as const
 export const getLandingData = async (payload: Payload): Promise<LandingData> => {
   const [guilds, featuredGames, articles, gamesByGuild] = await Promise.all([
     payload.find({ collection: 'guilds', ...asVisitor, sort: 'name', limit: FEATURED_GUILDS, depth: 1 }),
-    payload.find({ collection: 'games', ...asVisitor, sort: '-publishedAt', limit: FEATURED_GAMES, depth: 1 }),
+    payload.find({ collection: 'games', ...asVisitor, sort: '-createdAt', limit: FEATURED_GAMES, depth: 1 }),
     payload.find({ collection: 'articles', ...asVisitor, sort: '-date', limit: RECENT_ARTICLES, depth: 0 }),
     countPublishedGamesByGuild(payload),
   ])
