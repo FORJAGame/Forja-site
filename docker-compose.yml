@@ -16,7 +16,8 @@ services:
       - '127.0.0.1:3001:3000'
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/forja_app
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
+      # Optional here so `pnpm db:up` works without it; the container itself refuses to start without one.
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-}
       S3_ENDPOINT: http://storage:8333
       S3_REGION: us-east-1
       S3_BUCKET: forja-media-app
