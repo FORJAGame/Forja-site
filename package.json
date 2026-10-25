@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "vercel-build": "payload migrate && pnpm build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
@@ -17,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "db:up": "docker compose up -d --wait postgres storage && docker compose run --rm storage-buckets",
     "db:down": "docker compose down",
+    "docker:up": "docker compose up -d --build",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "motion": "13.4.4",
     "next": "16.3.6",
     "payload": "3.90.2",
+    "pg": "8.20.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "sharp": "0.35.4"
@@ -44,6 +45,7 @@
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.7",
     "@types/node": "22.19.9",
+    "@types/pg": "8.20.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "dotenv": "^18.0.4",

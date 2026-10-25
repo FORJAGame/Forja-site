@@ -1,5 +1,29 @@
 services:
-  postgres:
+  # The site from the Dockerfile, the same image that runs in the cloud. It gets its own database and bucket:
+  # `pnpm dev` pushes the schema into `forja`, and a pushed database makes the container's `payload migrate` stop on a prompt.
+  app: # docker compose up -d --build app
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
+      storage-buckets:
+        condition: service_completed_successfully
+    # 3001 keeps 3000 free for `pnpm dev`.
+    ports:
+      - '127.0.0.1:3001:3000'
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/forja_app
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
+      S3_ENDPOINT: http://storage:8333
+      S3_REGION: us-east-1
+      S3_BUCKET: forja-media-app
+      S3_ACCESS_KEY_ID: forja
+      S3_SECRET_ACCESS_KEY: forja-dev-secret
+
+  postgres: # docker compose up -d postgres
     image: postgres:17-alpine
     restart: unless-stopped
     # Bound to this machine only: the dev credentials are public.
@@ -18,8 +42,7 @@ services:
       timeout: 5s
       retries: 20
 
-  # SeaweedFS instead of MinIO: MinIO's community edition was archived in 2026 and its images no longer pull.
-  storage:
+  storage: # docker compose up -d storage
     image: chrislusf/seaweedfs:4.47
     restart: unless-stopped
     command: server -dir=/data -s3 -s3.port=8333 -s3.config=/etc/seaweedfs/s3.json
@@ -36,16 +59,15 @@ services:
       timeout: 5s
       retries: 30
 
-  # Runs once through `pnpm db:up`; `docker compose up --wait` treats a container that exits as a failure.
-  storage-buckets:
+  # One-shot: creates the buckets and exits. Runs through `pnpm db:up` and before `app`. Never pass it to `up --wait`, which treats an exited container as a failure.
+  storage-buckets: # docker compose run --rm storage-buckets
     image: chrislusf/seaweedfs:4.47
-    profiles: ['setup']
     depends_on:
       storage:
         condition: service_healthy
     entrypoint: ['sh', '-c']
     command:
-      - 'for bucket in forja-media forja-media-test; do echo "s3.bucket.create -name $$bucket" | weed shell -master=storage:9333; done'
+      - 'for bucket in forja-media forja-media-test forja-media-app; do echo "s3.bucket.create -name $$bucket" | weed shell -master=storage:9333; done'
 
 volumes:
   pgdata:
